@@ -1,7 +1,7 @@
 <head>
-  <title>Todo List</title>
+  <title>Card Manager</title>
+  <link href="/css/cardmanager.css" rel="stylesheet" type="text/css">
 </head>
-
 <body>
   <div class="container">
     <div class="row">
@@ -48,29 +48,3 @@
 
   </div>
 </body>
-
-<template name="scan">
-  <li><strong>{{card}}</strong> - {{formatDate scannedAt}}:{{action}}</li>
-</template>
-
-<template name="card">
-  <li>{{barcode}}</li>
-</template>
-
-<template name="association">
-  <div class="col-xs-3" style="padding: 0;">
-    <div class="photo">
-      <img src="StudentPhotos/{{this}}.JPG" style="width:100%"/>
-    </div>
-  </div>
-</template>
-
-<template name="cardoncampus">
-  <div class="col-sm-1" style="padding: 0;">
-    <div class="miniphoto" id="{{this.barcode}}">
-      <div class="phototext">{{this.name}}</div>
-      <img src="StudentPhotos/{{this.barcode}}.JPG" style="width:100%"/>
-
-    </div>
- </div>
-</template>
