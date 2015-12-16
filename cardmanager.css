@@ -1,0 +1,80 @@
+/* CSS declarations go here */
+body {
+  font-family: sans-serif;
+  background-color: #315481;
+  background-image: linear-gradient(to bottom, #918e82, #315481 100%);
+  background-attachment: fixed;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+#debug{
+
+}
+.scans{
+  color:white;
+  font-size: x-small;
+}
+
+header{
+  margin: 15px;
+}
+.bigphoto{
+  margin-bottom: 1em;
+}
+.photo{
+  height: 180px;
+  overflow: hidden;
+  padding: 5px;
+}
+.miniphoto{
+  overflow: hidden;
+  padding: 5px;
+  height: 75px;
+}
+.miniphoto:hover{
+  cursor:crosshair;
+}
+.phototext{
+  color:white;
+  font-size: x-small;
+  position: absolute;
+  background-color: rgba(142, 141, 141, 0.75);
+  width: 100%;
+}
+#cardname{
+  margin-bottom: 0px;
+  font-size: x-large;
+}
+#expires{
+  font-style: italic;
+  margin-bottom: 0px;
+  font-size: x-large;
+}
+#cardnumber{
+  margin-bottom: 0px;
+  font-size: x-large;
+}
+#associations{
+
+}
+
+.currentcard{
+  background-color: white;
+  padding: 5px;
+}
+.enter{
+  color: white;
+  background-color: green;
+}
+.exit{
+  color: white;
+  background-color: red;
+}
+.defaultstatus{
+  color: white;
+  background-color: #00aad4;
+}

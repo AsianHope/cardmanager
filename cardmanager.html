@@ -1,0 +1,76 @@
+<head>
+  <title>Todo List</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div id="status" class="col-xs-12 {{currentstatus.class}}"><h2>{{currentstatus.message}}</h2></div>
+    </div>
+    <div class="row">
+      <div class="currentcard col-xs-12">
+        <div class="col-xs-4">
+          <div class="col-xs-12"><div class="bigphoto"><img src="StudentPhotos/{{currentcard.barcode}}.JPG" style="width:100%"/></div></div>
+          <div id="cardname" class="col-xs-12">{{currentcard.name}}</div>
+          <div id="cardnumber" class="col-xs-12">{{currentcard.barcode}}</div>
+          <div id="expires" class="col-xs-12">{{currentcard.expires}}</div>
+          <!-- {{#if currentUser}} -->
+              <form class="new-scan">
+                <input type="text" name="text" placeholder="Enter a barcode" autocomplete="off"/>
+                <button type="submit" style="btn btn-xs btn-success">Submit</button>
+              </form>
+            <!-- {{/if}} -->
+
+        </div>
+        <div id="associations" class="col-xs-8">
+          {{#each currentcard.associations}}
+            {{> association}}
+          {{/each}}
+        </div>
+
+      </div>
+
+    </div> <!--end row -->
+    <div class="col-md-8">
+        <strong style="color:white">Currently on Campus ({{cardsoncampuscount}})</strong><br/>
+        {{#each cardsoncampus}}
+          {{> cardoncampus}}
+        {{/each}}
+    </div>
+    <div class="col-md-4 scans">
+        <strong style="color:white">Most Recent Scans<br/></strong>
+          <ul>
+            {{#each recentscans}}
+              {{> scan}}
+            {{/each}}
+          </ul>
+    </div>
+
+  </div>
+</body>
+
+<template name="scan">
+  <li><strong>{{card}}</strong> - {{formatDate scannedAt}}:{{action}}</li>
+</template>
+
+<template name="card">
+  <li>{{barcode}}</li>
+</template>
+
+<template name="association">
+  <div class="col-xs-3" style="padding: 0;">
+    <div class="photo">
+      <img src="StudentPhotos/{{this}}.JPG" style="width:100%"/>
+    </div>
+  </div>
+</template>
+
+<template name="cardoncampus">
+  <div class="col-sm-1" style="padding: 0;">
+    <div class="miniphoto" id="{{this.barcode}}">
+      <div class="phototext">{{this.name}}</div>
+      <img src="StudentPhotos/{{this.barcode}}.JPG" style="width:100%"/>
+
+    </div>
+ </div>
+</template>

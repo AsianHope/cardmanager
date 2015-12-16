@@ -1,0 +1,57 @@
+//data model
+
+//Scans
+{
+  cardnumber: bc,
+  scantimes: [new Date(), "2015-10-12:06:00"]
+  action: "Security Scan",
+  value: 0.00,
+  products: [],
+  user: "Guard Booth 1"
+},
+{
+  cardnumber: bc,
+  scantimes: ["2015-10-12:06:00"]
+  action: "Purchase",
+  value: 0.50,
+  products: [COCA]
+},
+{
+  cardnumber: bc,
+  scantimes: ["2015-10-12:06:00"]
+  action: "Purchase",
+  value: 1.00,
+  products: [COCA,COCA]
+}
+
+//Actions
+{
+  string: "Security Scan",
+  states: ["Enter","Exit"]
+}
+
+{
+  string: "Lunch Card Scan",
+  states: [ATELUNCH]
+}
+
+{
+  string: "Point of Purchase",
+  states: [PURCHASE]
+}
+
+//Products
+{
+  id: COCA,
+  value: 0.50,
+  description: "Coca Cola (Can)"
+}
+
+//Cards
+{
+  "type": "Parent",
+  "associations": ["334", "225"],
+  "barcode": "P753",
+  "name": "Tito Tou",
+  "expires": "2015-06-14"
+}
