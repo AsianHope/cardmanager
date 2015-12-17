@@ -15,7 +15,7 @@ var defaultstatus = {
 };
 Session.set("currentcard", defaultcard);
 Session.set("currentstatus", defaultstatus);
-Template.body.helpers({
+Template.scanCard.helpers({
   cards: function () {
     return Cards.find({});
   },
@@ -39,7 +39,7 @@ Template.body.helpers({
   }
 });
 
-Template.body.events({
+Template.scanCard.events({
   //manually kick people off campus by clicking their photos
   "click .miniphoto": function (e) {
     e.preventDefault();
