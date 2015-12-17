@@ -1,0 +1,13 @@
+[{
+  "string": "Security Scan",
+  "states": ["Enter","Exit"]
+},
+{
+  "string": "Lunch Card Scan",
+  "states": ["ATELUNCH"]
+},
+{
+  "string": "Purchase",
+  "states": ["PURCHASE"]
+}
+]

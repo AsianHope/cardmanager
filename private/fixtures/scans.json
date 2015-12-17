@@ -1,7 +1,115 @@
-[{
-	"card": "P178",
-	"scannedAt": "2015-10-15:10:00:00"
-}, {
-	"card": "P179",
-	"scannedAt": "2015-10-15:10:01:00"
-}]
+[
+{
+    "cardnumber": "P1047",
+    "scantimes": ["Mon Dec 14 2015 02:16:40 GMT+0000 (UTC)", "Mon Dec 14 2015 04:16:40 GMT+0000 (UTC)"],
+    "action" : "Security Scan",
+    "value": 0.00,
+    "products": [],
+    "user": "Guard Booth 1"
+},
+{
+  "cardnumber": "P1049",
+  "scantimes": ["Wed Dec 16 2015 02:16:23 GMT+0000 (UTC)", "Wed Dec 16 2015 03:06:48 GMT+0000 (UTC)"],
+  "action" : "Security Scan",
+  "value": 0.00,
+  "products": [],
+  "user": "Guard Booth 1"
+},
+{
+  "cardnumber": "P753",
+  "scantimes": ["Wed Dec 16 2015 03:20:07 GMT+0000 (UTC)", "Wed Dec 16 2015 04:20:07 GMT+0000 (UTC)"],
+  "action" : "Security Scan",
+  "value": 0.00,
+  "products": [],
+  "user": "Guard Booth 1"
+},
+{
+  "cardnumber": "P754",
+  "scantimes": ["Thu Dec 17 2015 02:16:23 GMT+0000 (UTC)", null],
+  "action" : "Security Scan",
+  "value": 0.00,
+  "products": [],
+  "user": "Guard Booth 1"
+},
+{
+  "cardnumber": "P1048",
+  "scantimes": ["Wed Dec 16 2015 02:16:40 GMT+0000 (UTC)", null],
+  "action" : "Security Scan",
+  "value": 0.00,
+  "products": [],
+  "user": "Guard Booth 1"
+},
+{
+    "cardnumber" : "P1047",
+    "scantimes" : ["Thu Dec 17 2015 05:16:23 GMT+0000 (UTC)", "Thu Dec 17 2015 07:16:23 GMT+0000 (UTC)"],
+    "action" : "Security Scan",
+    "value": 0.00,
+    "products" : [],
+    "user": "Guard Booth 1"
+},
+{
+  "cardnumber" : "872",
+  "scantimes": ["Thu Dec 17 2015 05:16:23 GMT+0000 (UTC)"],
+  "action" : "Purchase",
+  "value": 0.50,
+  "products": ["COCA"],
+  "user" : "Cashier"
+},
+{
+  "cardnumber": "873",
+  "scantimes": ["Wed Dec 16 2015 09:16:40 GMT+0000 (UTC)"],
+  "action" : "Purchase",
+  "value": 1.00,
+  "products": ["COCA","COCA"],
+  "user" : "Cashier"
+},
+{
+  "cardnumber": "207",
+  "scantimes": ["Wed Dec 16 2015 04:16:40 GMT+0000 (UTC)"],
+  "action" : "Purchase",
+  "value": 0.50,
+  "products": ["BREAD"],
+  "user" : "Cashier"
+},
+{
+  "cardnumber": "208",
+  "scantimes": ["Thu Dec 17 2015 05:16:23 GMT+0000 (UTC)"],
+  "action" : "Purchase",
+  "value": 1.00,
+  "products": ["BREAD","COCA"],
+  "user" : "Cashier"
+},
+{
+  "cardnumber": "208",
+  "scantimes": ["Thu Dec 17 2015 04:03:17 GMT+0000 (UTC)"],
+  "action" : "Lunch Card Scan",
+  "value": 3.00,
+  "products": [],
+  "user" : "Cashier"
+},
+{
+  "cardnumber": "235",
+  "scantimes": ["Thu Dec 17 2015 04:30:17 GMT+0000 (UTC)"],
+  "action" : "Lunch Card Scan",
+  "value": 3.00,
+  "products": [],
+  "user" : "Cashier"
+},
+{
+  "cardnumber": "236",
+  "scantimes": ["Thu Dec 17 2015 04:30:17 GMT+0000 (UTC)"],
+  "action" : "Lunch Card Scan",
+  "value": 3.00,
+  "products": [],
+  "user" : "Cashier"
+},
+{
+  "cardnumber": "238",
+  "scantimes": ["Thu Dec 17 2015 04:10:17 GMT+0000 (UTC)"],
+  "action" : "Lunch Card Scan",
+  "value": 3.00,
+  "products": [],
+  "user" : "Cashier"
+},
+
+]
