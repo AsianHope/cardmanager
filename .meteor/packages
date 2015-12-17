@@ -22,3 +22,4 @@ accounts-facebook
 insecure
 twbs:bootstrap
 momentjs:moment
+iron:router
