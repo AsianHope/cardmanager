@@ -32,17 +32,17 @@
 
 {
   string: "Lunch Card Scan",
-  states: [ATELUNCH]
+  states: ["Ate lunch"]
 }
 
 {
   string: "Point of Purchase",
-  states: [PURCHASE]
+  states: ["Purchased"]
 }
 
 //Products
 {
-  id: COCA,
+  sku: COCA,
   value: 0.50,
   description: "Coca Cola (Can)"
 }
