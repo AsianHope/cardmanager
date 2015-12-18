@@ -1,7 +1,7 @@
 [
 {
     "cardnumber": "P1047",
-    "scantimes": ["Mon Dec 14 2015 02:16:40 GMT+0000 (UTC)", "Mon Dec 14 2015 04:16:40 GMT+0000 (UTC)"],
+    "scantimes": ["2015-12-18T02:48:04.905Z", "2015-12-19T02:48:04.905Z"],
     "action" : "Security Scan",
     "value": 0.00,
     "products": [],
@@ -9,7 +9,7 @@
 },
 {
   "cardnumber": "P1049",
-  "scantimes": ["Wed Dec 16 2015 02:16:23 GMT+0000 (UTC)", "Wed Dec 16 2015 03:06:48 GMT+0000 (UTC)"],
+  "scantimes": ["2015-12-17T02:48:04.905Z", "2015-12-17T03:48:04.905Z"],
   "action" : "Security Scan",
   "value": 0.00,
   "products": [],
@@ -17,7 +17,7 @@
 },
 {
   "cardnumber": "P753",
-  "scantimes": ["Wed Dec 16 2015 03:20:07 GMT+0000 (UTC)", "Wed Dec 16 2015 04:20:07 GMT+0000 (UTC)"],
+  "scantimes": ["2015-12-16T02:48:04.905Z", "2015-12-16T06:48:04.905Z"],
   "action" : "Security Scan",
   "value": 0.00,
   "products": [],
@@ -25,7 +25,7 @@
 },
 {
   "cardnumber": "P754",
-  "scantimes": ["Thu Dec 17 2015 02:16:23 GMT+0000 (UTC)", null],
+  "scantimes": ["2015-12-18T02:48:04.905Z", null],
   "action" : "Security Scan",
   "value": 0.00,
   "products": [],
@@ -33,7 +33,7 @@
 },
 {
   "cardnumber": "P1048",
-  "scantimes": ["Wed Dec 16 2015 02:16:40 GMT+0000 (UTC)", null],
+  "scantimes": ["2015-12-18T06:48:04.905Z", null],
   "action" : "Security Scan",
   "value": 0.00,
   "products": [],
@@ -41,7 +41,7 @@
 },
 {
     "cardnumber" : "P1047",
-    "scantimes" : ["Thu Dec 17 2015 05:16:23 GMT+0000 (UTC)", "Thu Dec 17 2015 07:16:23 GMT+0000 (UTC)"],
+    "scantimes" : ["2015-12-18T02:48:04.905Z", "2015-12-18T08:48:04.905Z"],
     "action" : "Security Scan",
     "value": 0.00,
     "products" : [],
@@ -49,7 +49,7 @@
 },
 {
   "cardnumber" : "872",
-  "scantimes": ["Thu Dec 17 2015 05:16:23 GMT+0000 (UTC)"],
+  "scantimes": ["2015-12-18T04:48:04.905Z"],
   "action" : "Purchase",
   "value": 0.50,
   "products": ["COCA"],
@@ -57,7 +57,7 @@
 },
 {
   "cardnumber": "873",
-  "scantimes": ["Wed Dec 16 2015 09:16:40 GMT+0000 (UTC)"],
+  "scantimes": ["2015-12-18T02:00:04.905Z"],
   "action" : "Purchase",
   "value": 1.00,
   "products": ["COCA","COCA"],
@@ -65,7 +65,7 @@
 },
 {
   "cardnumber": "207",
-  "scantimes": ["Wed Dec 16 2015 04:16:40 GMT+0000 (UTC)"],
+  "scantimes": ["2015-12-16T02:00:04.905Z"],
   "action" : "Purchase",
   "value": 0.50,
   "products": ["BREAD"],
@@ -73,7 +73,7 @@
 },
 {
   "cardnumber": "208",
-  "scantimes": ["Thu Dec 17 2015 05:16:23 GMT+0000 (UTC)"],
+  "scantimes": ["2015-12-18T05:50:04.905Z"],
   "action" : "Purchase",
   "value": 1.00,
   "products": ["BREAD","COCA"],
@@ -81,7 +81,7 @@
 },
 {
   "cardnumber": "208",
-  "scantimes": ["Thu Dec 17 2015 04:03:17 GMT+0000 (UTC)"],
+  "scantimes": ["2015-12-18T05:00:04.905Z"],
   "action" : "Lunch Card Scan",
   "value": 3.00,
   "products": [],
@@ -89,7 +89,7 @@
 },
 {
   "cardnumber": "235",
-  "scantimes": ["Thu Dec 17 2015 04:30:17 GMT+0000 (UTC)"],
+  "scantimes": ["2015-12-18T05:20:04.905Z"],
   "action" : "Lunch Card Scan",
   "value": 3.00,
   "products": [],
@@ -97,7 +97,7 @@
 },
 {
   "cardnumber": "236",
-  "scantimes": ["Thu Dec 17 2015 04:30:17 GMT+0000 (UTC)"],
+  "scantimes": ["2015-12-18T05:30:04.905Z"],
   "action" : "Lunch Card Scan",
   "value": 3.00,
   "products": [],
@@ -105,11 +105,10 @@
 },
 {
   "cardnumber": "238",
-  "scantimes": ["Thu Dec 17 2015 04:10:17 GMT+0000 (UTC)"],
+  "scantimes": ["2015-12-18T04:30:04.905Z"],
   "action" : "Lunch Card Scan",
   "value": 3.00,
   "products": [],
   "user" : "Cashier"
-},
-
+}
 ]
