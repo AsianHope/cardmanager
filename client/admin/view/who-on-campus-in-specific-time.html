@@ -1,0 +1,39 @@
+<template name="who_on_campus_in_specific_time">
+  <div class="currentcard col-xs-12">
+    <div class="col-md-9">
+      <h2>Who on Campus </h2>
+      <h3>{{view_startdate}} To {{view_enddate}} </h3>
+      <ul>
+      {{#each scans_in_specific_time}}
+        <li style="margin-bottom:15px;">
+          {{#with getCardByBarcode cardnumber}}
+            <div>
+              <strong>{{barcode}} - {{name}}</strong>
+            </div>
+          {{/with}}
+          Since {{formatDate scantimes.[0]}}
+          untill
+          {{#if scantimes.[1]}}
+            {{formatDate scantimes.[1]}}
+          {{else}}
+            Now
+          {{/if}}
+       </li>
+      {{/each}}
+    </ul>
+    </div>
+    <div class="col-md-3">
+      <form role="form">
+        <div class="form-group">
+          <input type="datetime-local" name="startdate" class="form-control" value="" required/>
+        </div>
+        <div class="form-group">
+          <input type="datetime-local" name="enddate" class="form-control" value="" required/>
+        </div>
+        <div class="form-group">
+          <input type="submit" name="submit" value="Submit" class="btn btn-primary"/>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>

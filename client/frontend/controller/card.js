@@ -146,12 +146,21 @@ Template.card.helpers({
 Template.card.events({
 
 });
+
 //handle dates with momentjs
 Template.registerHelper('formatDate', function(date) {
-  if(date)
-    return moment(date).format('MMM Do HH:mm');
-  else
+  if(date){
+    if (moment) {
+             return moment(date).format("MMM Do YYYY, h:mm:ss A");
+         }
+         else {
+             return date;
+         }
+  }
+  else{
     return null;
+
+  }
 });
 
 Template.registerHelper('since', function(date) {
