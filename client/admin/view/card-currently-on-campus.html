@@ -1,0 +1,16 @@
+<template name="cardCurrentlyOnCampus">
+  {{>header}}
+  <div class="currentcard col-xs-12">
+    <h2>Currently On Campus ({{cards_currently_on_campus_total}})</h2>
+    {{#each cards_currently_on_campus}}
+      <div style="margin-bottom:30px;" class="col-sm-1">
+        {{#with getCardByBarcode cardnumber}}
+            <div class="phototext">{{name}}</div>
+            <img style="width: 100%;" src="/StudentPhotos/{{barcode}}.JPG"/><br>
+            <strong>{{barcode}}</strong><br>
+        {{/with}}
+        {{since scantimes.[0]}}
+     </div>
+    {{/each}}
+  </div>
+</template>
