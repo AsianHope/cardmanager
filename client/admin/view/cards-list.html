@@ -1,0 +1,26 @@
+<template name="cardsList">
+  {{>header}}
+  <div class="currentcard col-xs-12">
+    <h2>Cards</h2>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Barcode</th>
+          <th>Name</th>
+          <th>Associations</th>
+          <th>Expires</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each cards_list}}
+         <tr>
+           <td><strong><a href="/admin/card-scanned/{{barcode}}">{{barcode}}</a></strong></td>
+           <td>{{name}}</td>
+           <td>{{associations}}</td>
+           <td>{{expires}}</td>
+         </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</template>
