@@ -8,3 +8,4 @@ Meteor.publish("scans", function () {
 Meteor.publish("cardsoncampus", function () {
   return CardsOnCampus.find();
 });
+Cards._ensureIndex({barcode: 1}, {unique: 1});
