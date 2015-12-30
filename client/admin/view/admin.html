@@ -4,3 +4,24 @@
     {{>who_on_campus_in_specific_time}}
   </div>
 </template>
+
+<template name="filter_by_badge_type">
+  <h4>
+    Filter Badge by
+    {{#if type}}
+      {{type}}
+    {{else}}
+      All Type
+    {{/if}}
+  </h4>
+  <form>
+    <div class="form-group">
+      <select name="badge_type" id="filter_by_badge_type" class="form-control">
+        <option value="">---Choose badge type---</option>
+        {{#each badges_type}}
+          <option value="{{.}}">{{.}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </form>
+</template>

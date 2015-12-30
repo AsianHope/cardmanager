@@ -1,29 +1,48 @@
 <template name="who_on_campus_in_specific_time">
   <div class="currentcard col-xs-12">
     <div class="col-md-9">
-      <h2>Who on Campus </h2>
+      <h2>({{scans_in_specific_time.length}}) On Campus During</h2>
       <h3>{{view_startdate}} To {{view_enddate}} </h3>
-      <ul>
-      {{#each scans_in_specific_time}}
-        <li style="margin-bottom:15px;">
-          {{#with getCardByBarcode cardnumber}}
-            <div>
-              <strong>{{barcode}} - {{name}}</strong>
-            </div>
-          {{/with}}
-          Since {{formatDate scantimes.[0]}}
-          untill
-          {{#if scantimes.[1]}}
-            {{formatDate scantimes.[1]}}
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Barcode</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Entered Date</th>
+            <th>Exited Date</th>
+            <th>Scanner</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each scans_in_specific_time}}
+          <tr>
+            {{#with getCardByBarcode cardnumber}}
+              <td>
+                <td><strong><a href="/admin/card-scanned/{{barcode}}">{{barcode}}</a></strong></td>
+              </td>
+              <td>
+                {{name}}
+              </td>
+              <td>
+                {{type}}
+              </td>
+            {{/with}}
+            <td>{{formatDate scantimes.[0]}}</td>
+            <td>{{formatDate scantimes.[1]}}</td>
+            <td>{{user}}</td>
+          </tr>
           {{else}}
-            Now
-          {{/if}}
-       </li>
-      {{/each}}
-    </ul>
+          <tr>
+            <td colspan="6">There are no items in this list.</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
     </div>
     <div class="col-md-3">
-      <form role="form">
+      {{> filter_by_badge_type type=badge_type}}
+      <form role="form" id="filter_by_date">
         <div class="form-group">
           <input type="datetime-local" name="startdate" class="form-control" value="" required/>
         </div>
