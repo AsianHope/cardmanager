@@ -1,7 +1,7 @@
 <template name="cardCurrentlyOnCampus">
   {{>header}}
-  <div class="currentcard col-xs-12">
-    <h2>Currently On Campus ({{cards_currently_on_campus_total}})</h2>
+  <div class="currentcard col-xs-9">
+    <h2>Currently On Campus ({{cards_currently_on_campus.length}})</h2>
     {{#each cards_currently_on_campus}}
       <div style="margin-bottom:30px;" class="col-sm-1">
         {{#with getCardByBarcode cardnumber}}
@@ -12,5 +12,8 @@
         {{since scantimes.[0]}}
      </div>
     {{/each}}
+  </div>
+  <div class="col-md-3">
+    {{> filter_by_badge_type type=badge_type}}
   </div>
 </template>
