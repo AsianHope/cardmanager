@@ -1,4 +1,4 @@
-<template name="who_on_campus_in_specific_time">
+<template name="cardOnCampusInSpecificTime">
   <div class="currentcard col-xs-12">
     <div class="col-md-9">
       <h2>({{scans_in_specific_time.length}}) On Campus During</h2>
@@ -19,7 +19,7 @@
           <tr>
             {{#with getCardByBarcode cardnumber}}
               <td>
-                <td><strong><a href="/admin/card-scanned/{{barcode}}">{{barcode}}</a></strong></td>
+                <td><strong><a href="card-scanned/{{barcode}}">{{barcode}}</a></strong></td>
               </td>
               <td>
                 {{name}}

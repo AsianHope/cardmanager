@@ -7,7 +7,7 @@ var end =  JSON.stringify(new Date());
 Session.set("view_startdate",start);
 Session.set("view_enddate",end);
 
-Template.who_on_campus_in_specific_time.helpers({
+Template.cardOnCampusInSpecificTime.helpers({
   scans_in_specific_time: function () {
     var startdate = Session.get("view_startdate");
     var enddate = Session.get("view_enddate");
@@ -72,7 +72,7 @@ Template.who_on_campus_in_specific_time.helpers({
   }
 });
 
-Template.who_on_campus_in_specific_time.events({
+Template.cardOnCampusInSpecificTime.events({
   "submit #filter_by_date": function (e) {
     e.preventDefault();
     var startdate = JSON.stringify(new Date(event.target.startdate.value));
