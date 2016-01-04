@@ -23,3 +23,9 @@ insecure
 twbs:bootstrap
 momentjs:moment
 iron:router
+alanning:roles
+dburles:collection-helpers
+aldeed:collection2
+accounts-base
+fortawesome:fontawesome
+yogiben:admin

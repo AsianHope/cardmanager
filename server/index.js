@@ -21,6 +21,70 @@ Meteor.startup(function(){
       Actions.insert(action);
     });
   }
+  // Testing: clear users each time.
+  if (Meteor.users.find().count() !== 0) {
+	  console.log('not empty');
+	  //Meteor.users.remove({});
+  }
+  // Create roles
+  var roles = [
+               {
+		    		"name": ["terminal"],
+		      },
+              {
+		    		"name": ["staff"],
+		      },
+              {
+		    		"name": ["admin"],
+		      },
+		      ];
+
+  _.each(roles, function(role) {
+	  if (Meteor.roles.find({'name': role}).count() === 0) {
+		  Roles.createRole(role);
+	  }
+  });
+  
+  ////////////////////////////////////////////////////////////////////
+  //Create Test Users
+  //
+  if (Meteor.users.find().fetch().length === 0) {
+	  console.log('Creating users: ');
+	  var users = [
+	               {name:"Normal",email:"normal@example.com",roles:[]},
+	               {name:"Guard",email:"guard@example.com",roles:['terminal']},
+	               {name:"Staff",email:"staff@example.com",roles:['staff']},
+	               {name:"Admin",email:"admin@example.com",roles:['admin','staff','terminal']}
+	               ];
+	  _.each(users, function (userData) {
+		  var id, user;
+		  console.log(userData);
+		  id = Accounts.createUser({
+			  email: userData.email,
+			  username: userData.name.toLowerCase().trim(),
+			  password: "password",
+			  profile: { name: userData.name }
+		  });
+		  
+
+		  console.log(Meteor.users.find({_id: id}).fetch());
+		  //email verification
+		  Meteor.users.update({_id: id}, {$set:{'emails.0.verified': true}});
+		  Roles.addUsersToRoles(id, userData.roles, Roles.GLOBAL_GROUP);
+	  });
+  }
+  
+  ////////////////////////////////////////////////////////////////////
+  //Prevent non-authorized users from creating new users
+  //
+  Accounts.validateNewUser(function (user) {
+    var loggedInUser = Meteor.user();
+    if (Roles.userIsInRole(loggedInUser, ['admin','staff'])) {
+      return true;
+    }
+    throw new Meteor.Error(403, "Not authorized to create new users");
+  });
+
 });
 
 Meteor.methods({

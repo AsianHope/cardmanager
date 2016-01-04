@@ -5,10 +5,10 @@ body {
   background-image: linear-gradient(to bottom, #918e82, #315481 100%);
   background-attachment: fixed;
 
-  position: absolute;
+  /*position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
+  left: 0;*/
 }
 
 #debug{
@@ -20,7 +20,7 @@ body {
 }
 
 header{
-  margin: 15px;
+  /*margin: 15px;*/
 }
 .bigphoto{
   margin-bottom: 1em;
