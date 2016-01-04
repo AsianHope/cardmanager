@@ -1,8 +1,8 @@
 var now = new Date();
 // get datetime before 5 hours
 now.setHours(now.getHours()-5);
-var start = JSON.stringify(now)
-var end =  JSON.stringify(new Date());
+var start = now
+var end =  new Date();
 
 Session.set("view_startdate",start);
 Session.set("view_enddate",end);
@@ -25,7 +25,7 @@ Template.cardOnCampusInSpecificTime.helpers({
           {'cardnumber': {$in: barcodes}},
           {$or:[
             {$and:[
-              {'scantimes.0':{$gte:JSON.parse(startdate)}},{'scantimes.1':{$lte:JSON.parse(enddate)}}
+              {'scantimes.0':{$gte:startdate}},{'scantimes.1':{$lte:enddate}}
             ]},
             {'scantimes.1':null}
           ]}
@@ -34,7 +34,7 @@ Template.cardOnCampusInSpecificTime.helpers({
       {sort: {scantimes : -1}}).fetch()
   },
   view_startdate : function(){
-    var startdate = JSON.parse(Session.get('view_startdate'));
+    var startdate = Session.get('view_startdate');
     if(startdate){
       if (moment) {
                return moment(startdate).format("MMM Do YYYY, h:mm:ss A");
@@ -49,7 +49,7 @@ Template.cardOnCampusInSpecificTime.helpers({
     }
   },
   view_enddate : function(){
-    var enddate = JSON.parse(Session.get('view_enddate'));
+    var enddate = Session.get('view_enddate');
     if(enddate){
       if (moment) {
                return moment(enddate).format("MMM Do YYYY, h:mm:ss A");
@@ -75,8 +75,8 @@ Template.cardOnCampusInSpecificTime.helpers({
 Template.cardOnCampusInSpecificTime.events({
   "submit #filter_by_date": function (e) {
     e.preventDefault();
-    var startdate = JSON.stringify(new Date(event.target.startdate.value));
-    var enddate = JSON.stringify(new Date(event.target.enddate.value));
+    var startdate = new Date(event.target.startdate.value);
+    var enddate = new Date(event.target.enddate.value);
     Session.set("view_startdate",startdate);
     Session.set("view_enddate",enddate);
   },
