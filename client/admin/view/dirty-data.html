@@ -1,0 +1,38 @@
+<template name="dirtyData">
+  Didn't exit the campus for mulitple days
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Barcode</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Entered</th>
+        <th>Scanner</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each did_not_exit_multiple_day}}
+      <tr>
+        {{#with getCardByBarcode cardnumber}}
+          <td>
+            <td><strong><a href="card-scanned/{{barcode}}">{{barcode}}</a></strong></td>
+          </td>
+          <td>
+            {{name}}
+          </td>
+          <td>
+            {{type}}
+          </td>
+        {{/with}}
+        <td title="{{formatDate scantimes.[0]}}">{{since scantimes.[0]}}</td>
+        <td>{{user}}</td>
+      </tr>
+      {{else}}
+      <tr>
+        <td colspan="6">There are no items in this list.</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+</template>
