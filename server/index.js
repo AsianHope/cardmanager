@@ -70,7 +70,7 @@ Meteor.startup(function(){
 		  console.log(Meteor.users.find({_id: id}).fetch());
 		  //email verification
 		  Meteor.users.update({_id: id}, {$set:{'emails.0.verified': true}});
-		  Roles.addUsersToRoles(id, userData.roles);
+		  Roles.addUsersToRoles(id, userData.roles, Roles.GLOBAL_GROUP);
 	  });
   }
   
