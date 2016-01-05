@@ -11,6 +11,7 @@ Template.dirtyData.helpers({
         ]
       },
       {sort: {scantimes : -1}}).fetch()
+      Session.set('did_not_exit_multiple_day',scan)
       return scan
   },
   getCardByBarcode:function(cardnumber){
@@ -47,5 +48,10 @@ Template.dirtyData.helpers({
   }
 });
 Template.dirtyData.events({
-
+  "click #scan_out": function (e) {
+    e.preventDefault();
+    did_not_exit_multiple_day =  Session.get('did_not_exit_multiple_day')
+    var IDs = did_not_exit_multiple_day.map(function(card) { return card._id });
+    Meteor.call('ScanOutCardsDidNotExitCampus',IDs);
+  }
 });
