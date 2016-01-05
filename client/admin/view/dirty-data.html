@@ -1,38 +1,94 @@
 <template name="dirtyData">
-  Didn't exit the campus for mulitple days
-  <table class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>Barcode</th>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Entered</th>
-        <th>Scanner</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each did_not_exit_multiple_day}}
-      <tr>
-        {{#with getCardByBarcode cardnumber}}
-          <td>
-            <td><strong><a href="card-scanned/{{barcode}}">{{barcode}}</a></strong></td>
-          </td>
-          <td>
-            {{name}}
-          </td>
-          <td>
-            {{type}}
-          </td>
-        {{/with}}
-        <td title="{{formatDate scantimes.[0]}}">{{since scantimes.[0]}}</td>
-        <td>{{user}}</td>
-      </tr>
-      {{else}}
-      <tr>
-        <td colspan="6">There are no items in this list.</td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
-
+  <div class="panel with-nav-tabs panel-default">
+    <div class="panel-heading">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#did_not_exit_campus" data-toggle="tab">Didn't exit the campus</a></li>
+        <li><a href="#scan_out_in_imediately" data-toggle="tab">Exited and immediately re-entered</a></li>
+        <li><a href="#other" data-toggle="tab">Other</a></li>
+      </ul>
+    </div>
+    <div class="panel-body">
+      <div class="tab-content">
+        <div class="tab-pane fade in active" id="did_not_exit_campus">
+          <h3>Didn't exit the campus for mulitple days</h3>
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Barcode</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Entered</th>
+                <th>Scanner</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each did_not_exit_multiple_day}}
+              <tr>
+                {{#with getCardByBarcode cardnumber}}
+                  <td>
+                    <td><strong><a href="card-scanned/{{barcode}}">{{barcode}}</a></strong></td>
+                  </td>
+                  <td>
+                    {{name}}
+                  </td>
+                  <td>
+                    {{type}}
+                  </td>
+                {{/with}}
+                <td title="{{formatDate scantimes.[0]}}">{{since scantimes.[0]}}</td>
+                <td>{{user}}</td>
+              </tr>
+              {{else}}
+              <tr>
+                <td colspan="6">There are no items in this list.</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="scan_out_in_imediately">
+          <h3>Exited and immediately re-entered</h3>
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Barcode</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Exited</th>
+                <th>Re-entered</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each cards_scan_out_and_in_immediately}}
+              <tr>
+                {{#with getCardByBarcode this.[0].cardnumber}}
+                  <td>
+                    <td><strong><a href="card-scanned/{{barcode}}">{{barcode}}</a></strong></td>
+                  </td>
+                  <td>
+                    {{name}}
+                  </td>
+                  <td>
+                    {{type}}
+                  </td>
+                {{/with}}
+                <td>{{ formatDate this.[0].scantimes.[1] }}</td>
+                <td>{{ formatDate this.[1].scantimes.[0] }}</td>
+                <td>{{ duration this.[1].scantimes.[0] this.[0].scantimes.[1]}}</td>
+              </tr>
+              {{else}}
+              <tr>
+                <td colspan="6">There are no items in this list.</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="other">
+          <h3>Other</h3>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
