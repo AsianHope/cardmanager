@@ -1,0 +1,99 @@
+<template name="terminalsList">
+  <div class="currentTerminal">
+    {{> status userStatus}}
+    {{> serverStatus }}
+  </div>
+</template>
+
+
+<template name="status">
+    {{#if isMonitoring}}
+    <h4>Idle monitoring is on.</h4>
+    <button class="btn btn-danger stop-monitor">Stop Monitor</button>
+    {{else}}
+    <form class="start-monitor">
+        <legend>Start monitor with the following parameters:</legend>
+        <label>Idle Threshold:</label>
+        <input class="form-control" name="threshold" type="number" min="5000" step="1" value="30000" required>
+        <label>Monitor Interval:</label>
+        <input class="form-control" name="interval" type="number" min="1000" step="1" value="1000" required>
+        <label>Idle on window blur:</label>
+        <select class="form-control" name="idleOnBlur" required>
+            <option value="true" selected>true</option>
+            <option value="false">false</option>
+        </select>
+        <button type="submit" class="btn btn-primary pull-right">Start Monitor</button>
+    </form>
+    {{/if}}
+</template>
+
+<template name="serverStatus">
+    <h3>All user connections on server:</h3>
+
+    <table class="table table-condensed table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Username/Connection</th>
+                <th>Idle</th>
+                <th>Last Activity</th>
+                <th>Disconnect</th>
+                <th>IP (<i>Last</i>)</th>
+                <th style="width: 256px">User Agent (<i>Last</i>)</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{#each anonymous}}
+        {{> serverConnection}}
+        {{/each}}
+        {{#each users}}
+            <tr class="bold {{userClass}}">
+                <td>{{username}}<br>(last login {{localeTime status.lastLogin.date}})</td>
+                <td>{{status.idle}}</td>
+                <td>{{#with status.lastActivity}}
+                    {{> relTime}}
+                    {{else}}
+                    {{lastActiveStatus}}
+                    {{/with}}
+                </td>
+                {{#if connected}}
+                <td><button class="disconnect">Disconnect</button></td>
+                {{else}}
+                <td>Offline</td>
+                {{/if}}
+                <td><i>{{status.lastLogin.ipAddr}}</i></td>
+                <td><i>{{status.lastLogin.userAgent}}</i></td>
+            </tr>
+            {{#each connections}}
+            {{> serverConnection}}
+            {{/each}}
+        {{/each}}
+        </tbody>
+    </table>
+</template>
+
+<template name="serverConnection">
+    <tr class="{{connectionClass}}">
+        <td>{{_id}}{{#with loginTime}}<br>(login {{this}}){{/with}}</td>
+        <td>{{idle}}</td>
+        <td>{{#with lastActivity}}
+            {{> relTime}}
+            {{else}}
+              {{lastActiveStatus}}
+            {{/with}}
+        </td>
+        {{#if connected}}
+          <td><button class="disconnect">Disconnect</button></td>
+        {{else}}
+          <td>Offline</td>
+        {{/if}}
+        <td>{{ipAddr}}</td>
+        <td>{{userAgent}}</td>
+    </tr>
+</template>
+
+<template name="relTime">
+    {{localeTime this}}
+    <br>
+    ({{relativeTime this}})
+</template>
+
