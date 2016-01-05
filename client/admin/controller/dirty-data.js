@@ -34,9 +34,18 @@ Template.dirtyData.helpers({
       }
     }
     return scan_out_in_immediately
+  },
+  scans : function(){
+    scans =  Scans.find({
+        $and :[
+          {'action':'Security Scan'},
+          {'scantimes.1':{$ne:null}}
+        ]
+      },
+      {sort: {scantimes : -1}}).fetch()
+    return scans
   }
 });
-
 Template.dirtyData.events({
 
 });

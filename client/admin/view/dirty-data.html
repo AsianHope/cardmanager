@@ -4,6 +4,7 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#did_not_exit_campus" data-toggle="tab">Didn't exit the campus</a></li>
         <li><a href="#scan_out_in_imediately" data-toggle="tab">Exited and immediately re-entered</a></li>
+        <li><a href="#on_campus_multiple_days" data-toggle="tab">On Campus for multiple days</a></li>
         <li><a href="#other" data-toggle="tab">Other</a></li>
       </ul>
     </div>
@@ -26,7 +27,7 @@
               <tr>
                 {{#with getCardByBarcode cardnumber}}
                   <td>
-                    <td><strong><a href="card-scanned/{{barcode}}">{{barcode}}</a></strong></td>
+                    <strong><a href="card-scanned/{{barcode}}">{{barcode}}</a></strong>
                   </td>
                   <td>
                     {{name}}
@@ -64,7 +65,7 @@
               <tr>
                 {{#with getCardByBarcode this.[0].cardnumber}}
                   <td>
-                    <td><strong><a href="card-scanned/{{barcode}}">{{barcode}}</a></strong></td>
+                    <strong><a href="card-scanned/{{barcode}}">{{barcode}}</a></strong>
                   </td>
                   <td>
                     {{name}}
@@ -82,6 +83,43 @@
                 <td colspan="6">There are no items in this list.</td>
               </tr>
               {{/each}}
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="on_campus_multiple_days">
+          <h3>On campus for multiple days</h3>
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Barcode</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Entered</th>
+                <th>Exited</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{# each scans }}
+              {{# if isOnCampusMultipleDay scantimes.[1] scantimes.[0] }}
+              <tr>
+                {{# with getCardByBarcode cardnumber }}
+                  <td>
+                    <strong><a href="card-scanned/{{barcode}}">{{ barcode }}</a></strong>
+                  </td>
+                  <td>
+                    {{ name }}
+                  </td>
+                  <td>
+                    {{ type }}
+                  </td>
+                {{/with}}
+                <td>{{ formatDate scantimes.[0] }}</td>
+                <td>{{ formatDate scantimes.[1] }}</td>
+                <td>{{ duration scantimes.[1] scantimes.[0]}}</td>
+              </tr>
+              {{/ if }}
+              {{/ each }}
             </tbody>
           </table>
         </div>

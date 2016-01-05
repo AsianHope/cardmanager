@@ -27,3 +27,16 @@ Template.registerHelper('duration', function(date1,date2) {
   else
     return null;
 });
+Template.registerHelper('isOnCampusMultipleDay', function(date1,date2) {
+  if(date1 != null && date2 != null){
+    if(moment.duration(date1-date2).asHours() > 24){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  else{
+    return false;
+  }
+});
