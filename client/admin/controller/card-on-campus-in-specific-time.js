@@ -27,7 +27,7 @@ Template.cardOnCampusInSpecificTime.helpers({
             {$and:[
               {'scantimes.0':{$gte:startdate}},{'scantimes.1':{$lte:enddate}}
             ]},
-            {'scantimes.1':null}
+            { $or:[{'scantimes': { $size: 1 }},{'scantimes.1':null}] }
           ]}
         ]
       },

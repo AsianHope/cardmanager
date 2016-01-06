@@ -6,7 +6,7 @@ Template.dirtyData.helpers({
     scan =  Scans.find({
         $and :[
           {'action':'Security Scan'},
-          {'scantimes.1':null},
+          { $or:[{'scantimes': { $size: 1 }},{'scantimes.1':null}] },
           {'scantimes.0':{$lte:last}}
         ]
       },
@@ -40,7 +40,7 @@ Template.dirtyData.helpers({
     scans =  Scans.find({
         $and :[
           {'action':'Security Scan'},
-          {'scantimes.1':{$ne:null}}
+          { $and:[{ $where: "this.scantimes.length > 1" },{'scantimes.1':{$ne:null}} ] }
         ]
       },
       {sort: {scantimes : -1}}).fetch()

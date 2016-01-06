@@ -12,7 +12,8 @@ Template.cardCurrentlyOnCampus.helpers({
         $and :[
           {'cardnumber': {$in: barcodes}},
           {'action':'Security Scan'},
-          {'scantimes.1':null}
+          { $or:[{'scantimes': { $size: 1 }},{'scantimes.1':null}] }
+
         ]
       },
       {sort: {scantimes : -1}}).fetch()
