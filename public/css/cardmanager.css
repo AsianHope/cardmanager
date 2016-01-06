@@ -78,3 +78,24 @@ header{
   color: white;
   background-color: #00aad4;
 }
+
+/*admin*/
+.invalid_card{
+  background: #dd4b39;
+  color: white;
+  padding: 10px 0 10px 10px;
+  font-size: 20px;
+}
+.admin_scan_out{
+  background: #00a65a;
+  color: white;
+  padding: 10px 0 10px 10px;
+  font-size: 20px;
+}
+.admin_scan_in{
+  background: #367fa9;
+  color: white;
+  padding: 10px 0 10px 10px;
+  font-size: 20px;
+
+}

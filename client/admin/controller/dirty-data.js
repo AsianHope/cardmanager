@@ -1,3 +1,12 @@
+
+var admin_default_scan_message = {
+  class: '',
+  message: ''
+}
+
+Session.set('admin_scan_message',admin_default_scan_message)
+Session.set('admin_current_card',DEFAULT_CARD)
+
 Template.dirtyData.helpers({
   'did_not_exit_multiple_day' : function(){
     var days = 2; // Days you want to subtract
@@ -45,6 +54,12 @@ Template.dirtyData.helpers({
       },
       {sort: {scantimes : -1}}).fetch()
     return scans
+  },
+  admin_scan_message : function(){
+    return Session.get('admin_scan_message')
+  },
+  admin_current_card : function(){
+    return Session.get('admin_current_card')
   }
 });
 Template.dirtyData.events({
@@ -53,5 +68,56 @@ Template.dirtyData.events({
     did_not_exit_multiple_day =  Session.get('did_not_exit_multiple_day')
     var IDs = did_not_exit_multiple_day.map(function(card) { return card._id });
     Meteor.call('ScanOutCardsDidNotExitCampus',IDs);
-  }
+  },
+  "submit #admin_badge_in_or_badge_out": function (e) {
+      e.preventDefault();
+      var barcode = event.target.barcode.value;
+      card = Cards.findOne({'barcode':barcode})
+      if (card){
+        scan = Scans.findOne({
+          $and:[
+            {'cardnumber':barcode},
+            {'action':'Security Scan'},
+            { $or:[{'scantimes': { $size: 1 }},{'scantimes.1':null}] }
+          ]},
+          {sort: {'scantimes.0' : -1}
+        })
+        // scan out
+        if(scan){
+          scan_out_sms = {
+            class: 'admin_scan_out',
+            message: 'Scan out !'
+          }
+
+          // call scanOut method from server
+          Meteor.call('scanOut',scan._id,new Date())
+
+          Session.set('admin_current_card',card)
+          Session.set('admin_scan_message',scan_out_sms)
+        }
+        // scan in
+        else{
+          scan_in_sms = {
+            class: 'admin_scan_in',
+            message: 'Scan in !'
+          }
+          // call scanIn() method from server
+          Meteor.call('scanIn',card.barcode,new Date(),"Security Scan",0.00,[],Meteor.userId());
+
+          Session.set('admin_current_card',card)
+          Session.set('admin_scan_message',scan_in_sms)
+        }
+      }
+      // Invalid card
+      else{
+        invalid_card = {
+          class: 'invalid_card',
+          message: 'Invalid Card !'
+        }
+
+        Session.set('admin_current_card',INVALID_CARD)
+        Session.set('admin_scan_message',invalid_card)
+
+      }
+    }
 });
