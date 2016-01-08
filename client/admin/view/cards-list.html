@@ -1,6 +1,6 @@
 <template name="cardsList">
   <div class="currentcard col-xs-12">
-    <table class="table table-bordered table-hover">
+    <table id="tbl_card_list" class="table dataTable no-footer">
       <thead>
         <tr>
           <th>Barcode</th>
@@ -21,4 +21,16 @@
       </tbody>
     </table>
   </div>
+  <script type="text/javascript">
+    $(function(){
+       $("#tbl_card_list").dataTable({
+         "aaSorting": [],
+         "bPaginate": true,
+         "bLengthChange": true,
+         "bFilter": true,
+         "bSort": true,
+         "bInfo": true
+       });
+     })
+  </script>
 </template>

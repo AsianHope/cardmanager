@@ -1,7 +1,7 @@
 <template name="singleCardScanned">
   <div class="currentcard col-xs-12">
     <h2><strong>{{barcode}}-{{name}}</strong> Scan History</h2>
-    <table class="table table-bordered table-hover">
+    <table id="tbl_scan_history" class="table dataTable no-footer">
       <thead>
         <tr>
           <th>Entered Date</th>
@@ -20,4 +20,16 @@
       </tbody>
     </table>
   </div>
+  <script type="text/javascript">
+    $(function(){
+       $("#tbl_scan_history").dataTable({
+         "aaSorting": [],
+         "bPaginate": true,
+         "bLengthChange": true,
+         "bFilter": true,
+         "bSort": true,
+         "bInfo": true
+       });
+     })
+  </script>
 </template>
