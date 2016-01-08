@@ -68,11 +68,15 @@ header{
 }
 .enter{
   color: white;
-  background-color: green;
+  background-color: #367fa9;
 }
 .exit{
   color: white;
-  background-color: red;
+  background-color: #00a65a;
+}
+.invalid{
+  color: white;
+  background-color: #dd4b39;
 }
 .defaultstatus{
   color: white;

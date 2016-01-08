@@ -9,13 +9,10 @@
           <div id="cardname" class="col-xs-12">{{currentcard.name}}</div>
           <div id="cardnumber" class="col-xs-12">{{currentcard.barcode}}</div>
           <div id="expires" class="col-xs-12">{{currentcard.expires}}</div>
-          <!-- {{#if currentUser}} -->
               <form class="new-scan">
                 <input type="text" name="text" placeholder="Enter a barcode" autocomplete="off"/>
                 <button type="submit" style="btn btn-xs btn-success">Submit</button>
               </form>
-            <!-- {{/if}} -->
-
         </div>
         <div id="associations" class="col-xs-8">
           {{#each currentcard.associations}}
@@ -26,18 +23,4 @@
       </div>
 
     </div> <!--end row -->
-    <div class="col-md-8">
-        <strong style="color:white">Currently on Campus ({{cardsoncampuscount}})</strong><br/>
-        {{#each cardsoncampus}}
-          {{> cardoncampus}}
-        {{/each}}
-    </div>
-    <div class="col-md-4 scans">
-        <strong style="color:white">Most Recent Scans<br/></strong>
-          <ul>
-            {{#each recentscans}}
-              {{> scan}}
-            {{/each}}
-          </ul>
-    </div>
 </template>
