@@ -1,0 +1,27 @@
+[
+{
+  "name": "Normal user",
+  "email": "normal@example.com",
+  "roles": []
+},
+{
+  "name": "Guard Booth 1",
+  "email": "guard@example.com",
+  "roles": ["terminal"]
+},
+{
+  "name": "Cashier",
+  "email": "cashier@example.com",
+  "roles": ["terminal"]
+},
+{
+  "name": "Staff user",
+  "email": "staff@example.com",
+  "roles": ["staff"]
+},
+{
+  "name": "Admin",
+  "email": "admin@example.com",
+  "roles": ["admin", "staff", "terminal"]
+}
+]
