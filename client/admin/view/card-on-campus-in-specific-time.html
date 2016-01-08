@@ -3,7 +3,7 @@
     <div class="col-md-9">
       <h2>({{scans_in_specific_time.length}}) On Campus During</h2>
       <h3>{{view_startdate}} To {{view_enddate}} </h3>
-      <table class="table table-bordered table-hover">
+      <table id="tbl_card_on_campus_in_specific_time" class="table dataTable no-footer">
         <thead>
           <tr>
             <th>Barcode</th>
@@ -55,4 +55,16 @@
       </form>
     </div>
   </div>
+  <script type="text/javascript">
+    $(function(){
+       $("#tbl_card_on_campus_in_specific_time").dataTable({
+         "aaSorting": [],
+         "bPaginate": true,
+         "bLengthChange": true,
+         "bFilter": true,
+         "bSort": true,
+         "bInfo": true
+       });
+     })
+  </script>
 </template>
