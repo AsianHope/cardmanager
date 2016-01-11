@@ -1,4 +1,11 @@
 <template name="scanCard">
+  {{#unless connection}}
+    <div class="overlay">
+      <div style="top: 50%; left: 50%; position: relative;">
+        <h1>Lost Connection !</h1>
+      </div>
+    </div>
+  {{/unless}}
     <div class="row">
       <div id="status" class="col-xs-12 {{currentstatus.class}}"><h2>{{currentstatus.message}}</h2></div>
     </div>
@@ -19,8 +26,6 @@
             {{> association}}
           {{/each}}
         </div>
-
       </div>
-
     </div> <!--end row -->
 </template>

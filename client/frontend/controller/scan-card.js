@@ -2,6 +2,15 @@ var defaultstatus = {
   class: 'defaultstatus',
   message: 'Welcome to the Logos Card Reader'
 };
+
+Session.set('network_connection_status',navigator.onLine)
+// if online or offline
+jQuery(window).on('offline', function (e) {
+  Session.set('network_connection_status',navigator.onLine);
+}).on('online', function (e) {
+  Session.set('network_connection_status',navigator.onLine);
+});
+
 Session.set("currentcard", DEFAULT_CARD);
 Session.set("currentstatus", defaultstatus);
 Template.scanCard.helpers({
@@ -19,6 +28,20 @@ Template.scanCard.helpers({
   },
   cardsoncampus: function() {
     return CardsOnCampus.find({});
+  },
+  connection : function(){
+    // if server run
+    if(Meteor.status().connected){
+      if(Session.get('network_connection_status') == true){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    else {
+      return false;
+    }
   }
 });
 
