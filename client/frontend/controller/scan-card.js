@@ -52,38 +52,51 @@ Template.scanCard.events({
     var barcode = event.target.text.value;
     card = Cards.findOne({'barcode':barcode})
     if (card){
-      scan = Scans.findOne({
-        $and:[
-          {'cardnumber':barcode},
-          {'action':'Security Scan'},
-          { $or:[{'scantimes': { $size: 1 }},{'scantimes.1':null}] }
-        ]},
-        {sort: {'scantimes.0' : -1}
-      })
-      // scan out
-      if(scan){
-        scan_out_sms = {
-          class: 'exit',
-          message: 'Exiting'
+      var expires = moment(card.expires).format("MM D YYYY");
+      var now = moment(new Date()).format("MM D YYYY");
+      // if card expires
+      if(new Date(expires) > new Date(now)){
+        scan = Scans.findOne({
+          $and:[
+            {'cardnumber':barcode},
+            {'action':'Security Scan'},
+            { $or:[{'scantimes': { $size: 1 }},{'scantimes.1':null}] }
+          ]},
+          {sort: {'scantimes.0' : -1}
+        })
+        // scan out
+        if(scan){
+          scan_out_sms = {
+            class: 'exit',
+            message: 'Exiting'
+          }
+
+          // call scanOut method from server
+          Meteor.call('scanOut',scan._id,new Date())
+
+          Session.set('currentcard',card)
+          Session.set('currentstatus',scan_out_sms)
         }
+        // scan in
+        else{
+          scan_in_sms = {
+            class: 'enter',
+            message: 'Entering'
+          }
+          // call scanIn() method from server
+          Meteor.call('scanIn',card.barcode,new Date(),"Security Scan",0.00,[],Meteor.userId());
 
-        // call scanOut method from server
-        Meteor.call('scanOut',scan._id,new Date())
-
-        Session.set('currentcard',card)
-        Session.set('currentstatus',scan_out_sms)
+          Session.set('currentcard',card)
+          Session.set('currentstatus',scan_in_sms)
+        }
       }
-      // scan in
       else{
-        scan_in_sms = {
-          class: 'enter',
-          message: 'Entering'
+        expires_card = {
+          class: 'card_expire',
+          message: 'Card has expired !'
         }
-        // call scanIn() method from server
-        Meteor.call('scanIn',card.barcode,new Date(),"Security Scan",0.00,[],Meteor.userId());
-
         Session.set('currentcard',card)
-        Session.set('currentstatus',scan_in_sms)
+        Session.set('currentstatus',expires_card)
       }
     }
     // Invalid card
