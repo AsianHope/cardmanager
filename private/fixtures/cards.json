@@ -1,4 +1,10 @@
 [{
+  "type": "Terminal",
+  "associations": [],
+  "barcode": "T1",
+  "name": "Guard Terminal",
+  "expires": "2015-06-14"
+},{
 	"type": "Parent",
 	"associations": ["334", "225"],
 	"barcode": "P753",

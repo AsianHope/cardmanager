@@ -28,7 +28,8 @@ Meteor.startup(function(){
 	    email: userData.email,
 	    username: userData.name.trim(), //toLowerCase().trim(),
 	    password: "password",
-	    profile: { name: userData.name }
+	    profile: { name: userData.name },
+	    cardnumber: userData.cardnumber ? userData.cardnumber : ''
 	  });
 	
       console.log(Meteor.users.find({_id: id}).fetch());
@@ -78,6 +79,36 @@ Accounts.onCreateUser(function(options, user) {
   user.username = user.emails[0].address;
   user.profile = options.profile ? options.profile : {};
   return user;  
+});
+
+// Login handler for terminals.
+Accounts.registerLoginHandler(function(loginRequest) {
+  var user, userId;
+  if (!loginRequest.cardnumber) {
+    return;
+  }
+  user = Meteor.users.findOne({
+    cardnumber: loginRequest.cardnumber
+  });
+  if (!user) {
+    return undefined;
+  } else {
+    userId = user._id;
+  }
+
+  //creating the token and adding to the user
+  var stampedToken = Accounts._generateStampedLoginToken();
+  var hashStampedToken = Accounts._hashStampedToken(stampedToken);
+
+  Meteor.users.update(userId, 
+    {$push: {'services.resume.loginTokens': hashStampedToken}}
+  );
+
+  //sending token along with the userId
+  return {
+    userId: userId,
+    token: stampedToken.token
+  }
 });
 
 Meteor.methods({

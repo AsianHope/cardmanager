@@ -18,8 +18,22 @@
       <div class="col-md-4 col-md-offset-4">
         <p class="alert alert-info" style="margin-top:100px;">
           You are not authorized to view this page
+          {{> login}}
         </p>
       </div>
     </div>
   </div>
+</template>
+
+<template name="login">
+  {{#if loggedIn}}
+    <h3>You are logged in as:</h3>
+    {{> loginButtons}}
+  {{else}}
+    <form class="form-inline terminal-login">
+      <p>Terminal Login</p>
+      <input class="form-control" type="text" name="cardnumber" required placeholder="Cardnumber...">
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+ {{/if}}
 </template>
