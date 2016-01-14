@@ -5,6 +5,12 @@
   "name": "Guard Terminal",
   "expires": "2015-06-14"
 },{
+  "type": "Terminal",
+  "associations": [],
+  "barcode": "C1",
+  "name": "Cashier",
+  "expires": "2015-06-14"
+},{
 	"type": "Parent",
 	"associations": ["334", "225"],
 	"barcode": "P753",
