@@ -31,3 +31,6 @@ fortawesome:fontawesome
 yogiben:admin
 mizzao:user-status
 mizzao:timesync
+cfs:standard-packages
+cfs:filesystem
+cfs:graphicsmagick

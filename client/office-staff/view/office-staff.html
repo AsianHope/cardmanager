@@ -1,0 +1,38 @@
+<template name="officeStaff">
+   <div class="col-md-12" style="background:white;">
+      <h1>New Card</h1>
+      <form class="new_card" enctype="multipart/form-data">
+        <div class="form-group">
+          <label>Barcode</label>
+          <input class="form-control" type="text" name="barcode"/>
+        </div>
+        <div class="form-group">
+          <label>Name</label>
+          <input class="form-control" type="text" name="name"/>
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select name="type" class="form-control">
+            <option value="">---Choose type---</option>
+            {{#each type}}
+              <option value="{{.}}">{{.}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Expires</label>
+          <input class="form-control" type="date" name="expires"/>
+        </div>
+        <div class="form-group">
+          <label>Association</label>
+          <input class="form-control" type="text" name="associations"/>
+        </div>
+        <div class="form-group">
+          <label>Picture</label>
+          <input class="myFileInput" type="file"  name="files"/>
+        </div>
+
+        <input class="btn btn-primary" type="submit">
+      </form>
+   </div>
+</template>
