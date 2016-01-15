@@ -44,10 +44,6 @@
                 <td title="{{formatDate scantimes.[0]}}">{{since scantimes.[0]}}</td>
                 <td>{{user}}</td>
               </tr>
-              {{else}}
-              <tr>
-                <td colspan="6">There are no items in this list.</td>
-              </tr>
               {{/each}}
             </tbody>
           </table>
@@ -82,10 +78,6 @@
                 <td>{{ formatDate this.[0].scantimes.[1] }}</td>
                 <td>{{ formatDate this.[1].scantimes.[0] }}</td>
                 <td>{{ duration this.[1].scantimes.[0] this.[0].scantimes.[1]}}</td>
-              </tr>
-              {{else}}
-              <tr>
-                <td colspan="6">There are no items in this list.</td>
               </tr>
               {{/each}}
             </tbody>
