@@ -76,7 +76,7 @@ Meteor.startup(function(){
 
 // Set usernames to email address.
 Accounts.onCreateUser(function(options, user) {
-  user.username = user.emails[0].address;
+  user.username = user.emails ? user.emails[0].address : user.username;
   user.profile = options.profile ? options.profile : {};
   return user;  
 });
