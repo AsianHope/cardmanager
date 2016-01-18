@@ -87,6 +87,18 @@ Accounts.registerLoginHandler(function(loginRequest) {
   if (!loginRequest.cardnumber) {
     return;
   }
+  // If there are no loginDates set, terminals can login.
+  var existing_dates = LoginDates.findOne();
+  if (existing_dates) {
+    // If there are existing dates, check the time.
+    var now = moment();
+    var day = "" + moment(now).format("dddd");
+    var hour = Number(moment(now).format("H"));
+    var dates = LoginDates.find({$and: [{daysOfWeek: day}, {hoursOfDay: hour}]}).count();
+    if (dates === 0) {
+       return undefined;
+    }
+  }
   user = Meteor.users.findOne({
     cardnumber: loginRequest.cardnumber
   });
