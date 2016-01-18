@@ -32,8 +32,13 @@
   {{else}}
     <form class="form-inline terminal-login">
       <p>Terminal Login</p>
-      <input class="form-control" type="text" name="cardnumber" required placeholder="Cardnumber...">
+      <input id="enter-cardnumber" class="form-control" type="text" name="cardnumber" required placeholder="Cardnumber...">
       <button type="submit" class="btn btn-primary">Login</button>
     </form>
+  <script type="text/javascript">
+    $(function(){
+       $("#enter-cardnumber").focus().select();
+     })
+  </script>
  {{/if}}
 </template>
