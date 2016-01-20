@@ -29,3 +29,8 @@ Template.officeStaff.helpers({
     return type
   }
 });
+
+// upgrade mdl for office staff menu
+Template.officeStaffMenu.onRendered(function () {
+	componentHandler.upgradeAllRegistered();
+});

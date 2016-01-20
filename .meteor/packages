@@ -34,3 +34,4 @@ mizzao:timesync
 cfs:standard-packages
 cfs:filesystem
 cfs:graphicsmagick
+spectrum:material-design-lite
