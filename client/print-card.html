@@ -1,0 +1,168 @@
+<template name="printCard">
+<style type="text/css">
+  .button{
+    display: inline-block;
+    color: white;
+    background-color: #357ebd;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+  }
+  .form_group{
+    margin-bottom: 15px;
+  }
+  .form_control{
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  }
+  #login-buttons{
+    display: none ! important;
+  }
+</style>
+  <div id="container" style="display:block;">
+      <div class="card">
+          <div class="logo"><img src = "/print/img/logoslogo.png" class = "logoimg" style="width: 100%"></div>
+          <div class="photo"></div>
+          <div class="name">Input a Name</div>
+          <div class="title">Staff</div>
+          <div class="barcode"><img src = "http://services.asianhope.org/idcards/barcode.php?text=123&size=30" id = "barcodeimg" alt="blah"></div>
+          <div class="barcodenumber">123</div>
+          <div class="cardbody">
+            <ul>
+              <li id="dob">DOB: 15-08-1981</li>
+              <li>Emergency Contact:</li>
+              <li id="econtact1">017-XXX-XXXX</li>
+              <li id="econtact2">024-XXX-XXXX</li>
+            </ul>
+          </div>
+          <div class="footer"><img class="footerimg" src = "/print/img/logoslibraryfooter.png" style="width: 100%"/> </div>
+      </div>
+  </div>
+  <div id="controls" style="position: absolute; left: 600px;">
+    <div id="input_title" class="form_group">
+      <label for="inputtitle">Please input title : </label>
+      <input class="form_control" type="text" id ="inputtitle" placeholder="Staff" value="Staff"/>
+    </div>
+    <div id="buttons">
+      <div class="form_group">
+        <button id="staff" class="button">LIS Staff</button>
+        <button id="ah-staff" class="button">AH Staff</button>
+        <button id="vdp-staff" class="button">VDP Staff</button>
+      </div>
+    </div>
+    <div id="photoControl" class="ui-widget-content" style="background-color:red; width:200px; height:200px"><div id="x-position"></div><div id="y-position"></div></div>
+  </div>
+  <script type='text/javascript'>
+      $(function() {
+        var barcode = getParameterByName('barcode');
+        var name = getParameterByName('name');
+        var type = getParameterByName('type');
+        var profile = getParameterByName('profile');
+        $('.barcodenumber').html(barcode);
+        $('.name').html(name);
+        $(".photo").css("background-image","url("+"/StudentPhotos/"+profile+")");
+
+        var bcurl = "http://services.asianhope.org/idcards/barcode.php";
+        // library access card
+        var departmnettag = "";
+        bcnum_pre = "";
+        bcnum_post= "";
+        bcsize = 60;
+        $('.barcode').html('<img src="'+bcurl+'?text='+barcode+'&size='+bcsize+'"/>');
+        $('link').attr('href','/print/css/librarybc.css');
+        $('.footerimg').attr('src','/print/img/logoslibraryfooter.png');
+        $('.logoimg').attr('src','/print/img/logoslibrarylogo.png');
+
+        // hide card control
+        // $("#controls").hide();
+
+        if(type == 'Parent'){
+          bcnum_pre = "";
+          bcnum_post= "";
+          bcsize = 60;
+          //reload barcode
+          $('.barcode').html('<img src="'+bcurl+'?text='+barcode+'&size='+bcsize+'"/>');
+          $('link').attr('href','/print/css/pickupbc.css');
+          $('.footerimg').attr('src','/print/img/logospickupfooter.png');
+          $('.logoimg').attr('src','/print/img/logospickuplogo.png');
+          $("#controls").hide();
+        }
+        else if (type=='Staff') {
+          bcnum_pre = "";
+          bcnum_post= "";
+          bcsize = 30;
+          departmenttag ="";
+          //reload barcode
+          $('.barcode').html('<img src="'+bcurl+'?text='+barcode+'&size='+bcsize+'"/>');
+          $('link').attr('href','/print/css/ahstaffcard.css');
+          $('.footerimg').attr('src','/print/img/ahfooter.png');
+          $('.logoimg').attr('src','/print/img/ahlogo.png');
+          // show card controls
+          $("#controls").show();
+
+          $('#staff').click(function (){
+            departmenttag ="";
+            $('.title').html(departmenttag+$('#inputtitle').val());
+            $('link').attr('href','/print/css/staffcard.css');
+            $('.footerimg').attr('src','/print/img/logosfooter.png');
+            $('.logoimg').attr('src','/print/img/logoslogo.png');
+          });
+
+          $('#ah-staff').click(function (){
+            departmenttag ="";
+            $('.title').html(departmenttag+$('#inputtitle').val());
+            $('link').attr('href','/print/css/ahstaffcard.css');
+            $('.footerimg').attr('src','/print/img/ahfooter.png');
+            $('.logoimg').attr('src','/print/img/ahlogo.png');
+          });
+
+          $('#vdp-staff').click(function (){
+            departmenttag = "Village Development Program<br/>"
+            $('.title').html(departmenttag+$('#inputtitle').val());
+            $('link').attr('href','/print/css/vdpstaffcard.css');
+            $('.footerimg').attr('src','/print/img/vdpfooter.png');
+            $('.logoimg').attr('src','/print/img/vdplogo.png');
+          });
+
+          $('#inputtitle').on("change", function(){
+              $('.title').html(departmenttag+$('#inputtitle').val());
+          });
+        }
+        else{
+          $("#controls").hide();
+        }
+
+        $('#photoControl').draggable({
+            drag: function(){
+               var position = $(this).position()
+               $('.photo').css('background-position',position.left+'px '+position.top+'px');
+            }
+        });
+        function getParameterByName(name) {
+          var name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+          var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+              results = regex.exec(location.search);
+          return results === null ? "" : decodeURIComponent(results[1]);
+        }
+      });
+  </script>
+</template>

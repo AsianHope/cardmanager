@@ -8,7 +8,6 @@ Template.officeStaff.events({
     var associations = event.target.associations.value;
 
     var array_of_associations = associations.split(',');
-    console.log(array_of_associations)
     var files = $('.myFileInput').get(0).files[0];
     var fileObj = new FS.File(files);
     // set file name
@@ -16,7 +15,11 @@ Template.officeStaff.events({
      Images.insert(fileObj, function (err, Obj) {
        var filename = Obj.collectionName+"-"+Obj._id+"-"+Obj.name();
        Meteor.call('create_new_card',barcode,name,type,expires,array_of_associations,filename);
+       Meteor.defer(function() {
+         Router.go('singleCard', {barcode: barcode});
+       });
      });
+    return false;
   }
 });
 

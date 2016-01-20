@@ -1,0 +1,192 @@
+@page { size:86mm 54mm;}
+@media screen{
+#container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin:0;
+    padding:0;
+    width: 81mm;
+}
+.card_front{
+    width: 100%;
+    padding-top: 5mm;
+    position: relative;
+    font-family: "Futura Medium" sans-serif;
+    text-align: center;
+    page-break-after: always;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+.card{
+    width: 100%;
+    height: 48.5mm;
+    padding-top: 2mm;
+    position: relative;
+    font-family: "Futura Medium" sans-serif;
+    text-align: center;
+    page-break-after: always;
+    background-image:url('../img/logostree.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: 0 2mm;
+    background-color: #a02c2c;
+
+}
+.photo{
+    text-align: right;
+    height: 3.4cm;
+    width: 2.4cm;
+    position: relative;
+    left: 55mm;
+    background-image:url('../img/nophoto.jpg');
+    background-size: cover;
+    background-position: center center;
+    border: 1px solid white;
+
+}
+.logo_front{
+    position: relative;
+}
+.logo_back{
+
+}
+.logo{
+  display:none;
+}
+
+.name{
+    font-weight: bold;
+    color: white;
+    text-align: right;
+    padding-right: 2mm;
+    padding-top: 2mm;
+}
+.title{
+  display: none;
+
+}
+.expires{
+    font-size: small;
+}
+.barcode{
+    display:none;
+    width: 90%;
+    margin: auto;
+    padding: 2.6mm 0;
+    z-index:-1;
+    text-align: center;
+}
+.barcodenumber{
+  display:none;
+}
+.cardbody{
+  display:none;
+}
+
+}
+@media print{
+#controls{
+    display: none;
+}
+#container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin:0;
+    padding:0;
+    width: 81mm;
+}
+#controls{
+    position: relative;
+    left: 100mm;
+    width: 40%;
+}
+#container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin:0;
+    padding:0;
+    width: 81mm;
+}
+.card_front{
+    width: 100%;
+    padding-top: 5mm;
+    position: relative;
+    font-family: "Futura Medium" sans-serif;
+    text-align: center;
+    page-break-after: always;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+.card{
+    width: 100%;
+    height: 48.5mm;
+    padding-top: 2mm;
+    position: relative;
+    font-family: "Futura Medium" sans-serif;
+    text-align: center;
+    page-break-after: always;
+    background-image:url('../img/logostree.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: 0 2mm;
+    background-color: #a02c2c;
+
+}
+.photo{
+    text-align: right;
+    height: 3.4cm;
+    width: 2.4cm;
+    position: relative;
+    left: 55mm;
+    background-image:url('../img/nophoto.jpg');
+    background-size: cover;
+    background-position: center center;
+    border: 1px solid white;
+
+}
+.logo_front{
+    position: relative;
+}
+.logo_back{
+
+}
+.logo{
+  display:none;
+}
+
+.name{
+    font-weight: bold;
+    color: white;
+    text-align: right;
+    padding-right: 2mm;
+    padding-top: 2mm;
+}
+.title{
+  display: none;
+
+}
+.expires{
+    font-size: small;
+}
+.barcode{
+    display:none;
+    width: 90%;
+    margin: auto;
+    padding: 2.6mm 0;
+    z-index:-1;
+    text-align: center;
+}
+.barcodenumber{
+  display:none;
+}
+.cardbody{
+  display:none;
+}
+}

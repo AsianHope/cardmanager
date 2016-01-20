@@ -1,0 +1,151 @@
+@page { size:54mm 86mm;}
+@media screen{
+#container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin:0;
+    padding:0;
+    width: 54mm;
+}
+.card{
+    width: 100%;
+    height: 86mm;
+    position: relative;
+    background-color: #482648;
+    font-family: "Futura Medium" sans-serif;
+    text-align: center;
+    page-break-after: always;
+    border:solid 3px lightgrey;
+    margin: 5px;
+
+}
+.photo{
+    text-align: center;
+    height: 3.7cm;
+    width: 3.7cm;
+    border-radius:50%;
+    position: relative;
+    left: 15%;
+    background-image:url('../img/nophoto.jpg');
+    background-size: cover;
+    background-position: center center;
+    border: 3px solid #fad596;
+    margin-bottom: 15px;
+
+}
+.logo{
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.name{
+    font-weight: bold;
+    color:white;
+}
+.title{
+color:white;
+margin-bottom: 5px;
+font-size: small
+
+}
+.expires{
+    font-size: small;
+}
+.barcode{
+    width: 90%;
+    margin: auto;
+    font-size:x-small;
+}
+.footer{
+}
+.barcodenumber{
+  font-size:x-small;
+  color: white;
+  padding-bottom: 3.5mm;
+}
+.cardbody{
+  display:none;
+}
+}
+@media print{
+* { margin: 0 !important; padding: 0 !important; }
+#controls_staff{
+    display:none;
+}
+#controls{
+  display:none;
+}
+#container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin:0;
+    padding:0;
+    width: 54mm;
+    height: 86mm !important;
+    float: none !important;
+}
+.card{
+    width: 100%;
+    height: 86mm;
+    position: relative;
+    font-family: "Futura Medium" sans-serif;
+    text-align: center;
+    page-break-after: always;
+    background-image:url('../img/ahwatermark.png');
+    background-size: 200%;
+    background-repeat: repeat;
+    background-position: center;
+
+}
+
+
+.photo{
+    text-align: center;
+    height: 3.7cm;
+    width: 3.7cm;
+    border-radius:50%;
+    position: relative;
+    left: 15%;
+    background-image:url('../img/nophoto.jpg');
+    background-size: cover;
+    background-position: center center;
+    border: 3px solid #fad596;
+    margin-bottom: 10px;
+
+}
+.logo{
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.name{
+    font-weight: bold;
+    color:white;
+}
+.title{
+color:white;
+margin-bottom: 2px;
+font-size: small;
+}
+.expires{
+    font-size: small;
+}
+.barcode{
+    width: 90%;
+    margin: auto;
+    font-size:x-small;
+}
+.footer{
+}
+.barcodenumber{
+  font-size:x-small;
+  padding-bottom: 1.0mm;
+  color: white;
+
+}
+.cardbody{
+  display:none;
+}
+}

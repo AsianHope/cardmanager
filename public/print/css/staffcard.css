@@ -1,0 +1,146 @@
+@page { size:54mm 86mm;}
+@media screen{
+#container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin:0;
+    padding:0;
+    width: 54mm;
+}
+.card{
+    width: 100%;
+    height: 86mm;
+    position: relative;
+    font-family: "Futura Medium" sans-serif;
+    text-align: center;
+    page-break-after: always;
+    background-image:url('../img/watermark.png');
+    background-size: 200%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border:solid 3px lightgrey;
+    margin: 5px;
+
+}
+.photo{
+    text-align: center;
+    height: 3.7cm;
+    width: 2.6cm;
+    position: relative;
+    left: 25%;
+    background-image:url('../img/nophoto.jpg');
+    background-size: cover;
+    background-position: center center;
+    border: 3px solid lightgrey;
+
+
+}
+.logo{
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.name{
+    font-weight: bold;
+}
+.title{
+font-size:small;
+
+}
+.expires{
+    font-size: small;
+}
+.barcode{
+    width: 90%;
+    margin: auto;
+    font-size:x-small;
+}
+.footer{
+    position: absolute;
+    bottom: 0
+}
+.barcodenumber{
+  font-size:x-small;
+  padding-bottom: 3.5mm;
+}
+.cardbody{
+  display:none;
+}
+}
+@media print{
+* { margin: 0 !important; padding: 0 !important; }
+#controls_staff{
+    display:none;
+}
+#controls{
+  display:none;
+}
+#container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin:0;
+    padding:0;
+    width: 54mm;
+    height: 86mm !important;
+    float: none !important;
+}
+.card{
+    width: 100%;
+    height: 86mm;
+    position: relative;
+    font-family: "Futura Medium" sans-serif;
+    text-align: center;
+    page-break-after: always;
+    background-image:url('../img/watermark.png');
+    background-size: 200%;
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+.photo{
+    text-align: center;
+    height: 3.7cm;
+    width: 2.6cm;
+    position: relative;
+    left: 25%;
+    background-image:url('../img/nophoto.jpg');
+    background-size: cover;
+    background-position: center center;
+    border: 3px solid lightgrey;
+
+
+}
+.logo{
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.name{
+    font-weight: bold;
+}
+.title{
+font-size:small;
+
+}
+.expires{
+    font-size: small;
+}
+.barcode{
+    width: 90%;
+    margin: auto;
+    font-size:x-small;
+}
+.footer{
+    position: absolute;
+    bottom: 0;
+}
+.barcodenumber{
+  font-size:x-small;
+  padding-bottom: 3.0mm;
+}
+.cardbody{
+  display:none;
+}
+}

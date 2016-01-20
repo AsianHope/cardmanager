@@ -1,0 +1,133 @@
+@page { size:86mm 54mm;}
+@media screen{
+#container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin:0;
+    padding:0;
+    width: 81mm;
+}
+.card{
+    height: 48.5mm;
+    width: 100%;
+    position: relative;
+    font-family: "Futura Medium" sans-serif;
+    text-align: center;
+    page-break-after: always;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+.photo{
+    display:none;
+}
+.logo{
+    position: relative;
+}
+
+.name{
+    font-weight: bold;
+    color: white;
+    text-align: right;
+    padding-right: 2mm;
+    padding-top: 2mm;
+}
+.title{
+  display:none;
+}
+.expires{
+    font-size: small;
+}
+.barcode{
+    width: 90%;
+    margin: auto;
+    z-index:-1;
+    text-align: center;
+    padding-top: 2.6mm;
+}
+.footer{
+    padding-bottom: .5mm;
+    background-color: #fbb033;
+}
+.cardbody{
+  display:none;
+}
+.barcodenumber{
+  text-align: center;
+  padding-bottom: 2.6mm;
+}
+.name{
+  display:none;
+}
+}
+@media print{
+* { margin: 0 !important; padding: 0 !important; }
+#controls{
+    display: none;
+}
+#container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin:0;
+    padding:0;
+    width: 81mm;
+    height: 48.5mm !important;
+    float: none !important;
+}
+.card{
+    height: 48.5mm;
+    width: 100%;
+    position: relative;
+    font-family: "Futura Medium" sans-serif;
+    text-align: center;
+    page-break-after: always;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+.photo{
+    display:none;
+}
+.logo{
+    position: relative;
+}
+
+.name{
+    font-weight: bold;
+    color: white;
+    text-align: right;
+    padding-right: 2mm;
+    padding-top: 2mm;
+}
+.title{
+  display:none;
+}
+.expires{
+    font-size: small;
+}
+.barcode{
+    width: 90%;
+    margin: auto;
+    z-index:-1;
+    text-align: center;
+    padding-top: 2.6mm;
+}
+.footer{
+    padding-bottom: .5mm;
+    background-color: #fbb033;
+}
+.cardbody{
+  display:none;
+}
+.barcodenumber{
+  text-align: center;
+  padding-bottom: 2.6mm;
+}
+.name{
+  display:none;
+}
+}
