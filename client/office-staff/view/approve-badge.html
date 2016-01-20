@@ -1,0 +1,47 @@
+<template name="approveBadge">
+  <div class="col-md-12" style="margin-bottom:20px; background:white;">
+    <h3>Approve Badge for Entry to the Campus</h3>
+    <div class="row">
+      <div id="status" class="col-xs-12 {{current_current_approve_card_status.class}}"><h2>{{current_current_approve_card_status.message}}</h2></div>
+    </div>
+    <div class="row" style="margin: 20px 0 20px 0;">
+      <div class="col-md-6">
+        <form role="form">
+          <div class="form-group">
+            <input type="text" name="barcode" placeholder="Please enter barcode" class="form-control" required/>
+          </div>
+          <button class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <div class="col-md-6">
+          {{#if current_approve_card.profile }}
+            <img style="width:200px; height:270px;" src="/StudentPhotos/{{current_approve_card.profile}}"/><br>
+          {{else}}
+            <img src="/StudentPhotos/{{current_approve_card.barcode}}.JPG"/><br>
+          {{/if}}
+        </div>
+        <div class="col-md-6">
+          <table>
+            <tr>
+              <td>Barcode : </td>
+              <td>{{current_approve_card.barcode}}</td>
+            </tr>
+            <tr>
+              <td>Name : </td>
+              <td>{{current_approve_card.name}}</td>
+            </tr>
+            <tr>
+              <td>Type : </td>
+              <td>{{current_approve_card.type}}</td>
+            </tr>
+            <tr>
+              <td>Expires : </td>
+              <td>{{current_approve_card.expires}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
