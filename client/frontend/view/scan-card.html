@@ -17,7 +17,7 @@
           <div id="cardnumber" class="col-xs-12">{{currentcard.barcode}}</div>
           <div id="expires" class="col-xs-12">{{currentcard.expires}}</div>
               <form class="new-scan">
-                <input type="text" name="text" placeholder="Enter a barcode" autocomplete="off"/>
+                <input id="enter-barcode" type="text" name="text" placeholder="Enter a barcode" autocomplete="off"/>
                 <button type="submit" style="btn btn-xs btn-success">Submit</button>
               </form>
         </div>
@@ -28,4 +28,9 @@
         </div>
       </div>
     </div> <!--end row -->
+  <script type="text/javascript">
+    $(function(){
+       $("#enter-barcode").focus().select();
+     })
+  </script>
 </template>
