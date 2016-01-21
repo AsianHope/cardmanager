@@ -60,6 +60,17 @@ Template.dirtyData.helpers({
   },
   admin_current_card : function(){
     return Session.get('admin_current_card')
+  },
+  admin_current_card_expired : function(){
+    var card = Session.get('admin_current_card');
+    if (card) {
+      var expires = moment(new Date(card.expires)).format("MM D YYYY");
+      var now = moment().format("MM D YYYY");
+      // if card expires
+      if(new Date(expires) < new Date(now)){
+        return 'card_expire';
+      }
+    }
   }
 });
 Template.dirtyData.events({
@@ -71,7 +82,7 @@ Template.dirtyData.events({
   },
   "submit #admin_badge_in_or_badge_out": function (e) {
       e.preventDefault();
-      var barcode = event.target.barcode.value;
+      var barcode = e.target.barcode.value;
       card = Cards.findOne({'barcode':barcode})
       if (card){
         scan = Scans.findOne({
