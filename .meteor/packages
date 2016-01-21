@@ -35,3 +35,4 @@ cfs:standard-packages
 cfs:filesystem
 cfs:graphicsmagick
 spectrum:material-design-lite
+reactive-var

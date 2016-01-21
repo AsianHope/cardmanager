@@ -37,6 +37,9 @@
       <p>Terminal Login</p>
       <input id="enter-cardnumber" class="form-control" type="text" name="cardnumber" required placeholder="Cardnumber...">
       <button type="submit" class="btn btn-primary">Login</button>
+      {{#if errorMessage}}
+        <div class="ui error message">{{errorMessage}}</div>
+      {{/if}}
     </form>
   <script type="text/javascript">
     $(function(){
