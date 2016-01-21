@@ -7,7 +7,14 @@ Template.officeStaff.events({
     var expires = event.target.expires.value;
     var associations = event.target.associations.value;
     
-    var array_of_associations = associations.split(',');
+    // generate associations string to array split by commas
+    if (associations){
+      var array_of_associations = associations.split(',');
+    }
+    else{
+      var array_of_associations = [];
+    }
+
     var files = $('.myFileInput').get(0).files[0];
     // if file defined
     if (files){
