@@ -6,27 +6,50 @@ Template.officeStaff.events({
     var type = event.target.type.value;
     var expires = event.target.expires.value;
     var associations = event.target.associations.value;
-
+    
     var array_of_associations = associations.split(',');
     var files = $('.myFileInput').get(0).files[0];
-    var fileObj = new FS.File(files);
-    // set file name
-    fileObj.name(barcode+"."+fileObj.extension());
-     Images.insert(fileObj, function (err, Obj) {
-       var filename = Obj.collectionName+"-"+Obj._id+"-"+Obj.name();
-       Meteor.call('create_new_card',barcode,name,type,expires,array_of_associations,filename);
-       Meteor.defer(function() {
-         Router.go('singleCard', {barcode: barcode});
+    // if file defined
+    if (files){
+      var fileObj = new FS.File(files);
+      fileObj.name(barcode+"."+fileObj.extension());
+      // set file name
+       Images.insert(fileObj, function (err, Obj) {
+         if (err){
+           Session.set('add_new_card_message','Fail to upload file !');
+         }
+         else{
+           var filename = Obj.collectionName+"-"+Obj._id+"-"+Obj.name();
+           Meteor.call('create_new_card', barcode,name,type,expires,array_of_associations,filename, function (error, result) {
+             if(error){
+               Session.set('add_new_card_message',error.reason);
+             }
+             else {
+               Meteor.defer(function() {
+                 Router.go('singleCard', {barcode: barcode});
+               });
+               Session.set('add_new_card_message','');
+
+             }
+          });
+         }
        });
-     });
+    }
+    // if file undefined
+    else{
+      Session.set('add_new_card_message','No file selected !');
+    }
     return false;
   }
 });
 
 Template.officeStaff.helpers({
   type: function () {
-    type =  BADGE_TYPE
-    return type
+    type =  BADGE_TYPE;
+    return type;
+  },
+  add_new_card_message: function(){
+    return Session.get('add_new_card_message');
   }
 });
 

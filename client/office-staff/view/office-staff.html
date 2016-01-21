@@ -1,18 +1,19 @@
 <template name="officeStaff">
    <div class="col-md-12" style="background:white;">
       <h1>New Card</h1>
+      <span style="color:red;">{{add_new_card_message}}</span>
       <form class="new_card" enctype="multipart/form-data">
         <div class="form-group">
           <label>Barcode</label>
-          <input class="form-control" type="text" name="barcode"/>
+          <input class="form-control" type="text" name="barcode" required/>
         </div>
         <div class="form-group">
           <label>Name</label>
-          <input class="form-control" type="text" name="name"/>
+          <input class="form-control" type="text" name="name" required/>
         </div>
         <div class="form-group">
           <label>Type</label>
-          <select name="type" class="form-control">
+          <select name="type" class="form-control" required>
             <option value="">---Choose type---</option>
             {{#each type}}
               <option value="{{.}}">{{.}}</option>
@@ -21,7 +22,7 @@
         </div>
         <div class="form-group">
           <label>Expires</label>
-          <input class="form-control" type="date" name="expires"/>
+          <input class="form-control" type="date" name="expires" required/>
         </div>
         <div class="form-group">
           <label>Association</label>
@@ -29,7 +30,7 @@
         </div>
         <div class="form-group">
           <label>Picture</label>
-          <input class="myFileInput" type="file"  name="files"/>
+          <input class="myFileInput" type="file"  name="files" required/>
         </div>
 
         <input class="btn btn-primary" type="submit">
