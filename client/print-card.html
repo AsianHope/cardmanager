@@ -60,6 +60,14 @@
           <div class="footer"><img class="footerimg" src = "/print/img/logoslibraryfooter.png" style="width: 100%"/> </div>
       </div>
   </div>
+  <div id="container_back">
+      <div class="card_back">
+          <div class="logo_back"><img src = "/print/img/logoslogo.png" class = "logoimg" style="width: 100%"></div>
+          <div class="barcode_back"><img src = "http://services.asianhope.org/idcards/barcode.php?text=123&size=30" id = "barcodeimg" alt="blah"></div>
+          <div class="barcodenumber_back">123</div>
+          <div class="footer_back"><img class="footerimg" src = "/print/img/logoslibraryfooter.png" style="width: 100%"/> </div>
+      </div>
+  </div>
   <div id="controls" style="position: absolute; left: 600px;">
     <div id="input_title" class="form_group">
       <label for="inputtitle">Please input title : </label>
@@ -80,6 +88,7 @@
         var name = getParameterByName('name');
         var type = getParameterByName('type');
         var profile = getParameterByName('profile');
+        $('.barcodenumber_back').html(barcode);
         $('.barcodenumber').html(barcode);
         $('.name').html(name);
         $(".photo").css("background-image","url("+"/StudentPhotos/"+profile+")");
@@ -91,12 +100,11 @@
         bcnum_post= "";
         bcsize = 60;
         $('.barcode').html('<img src="'+bcurl+'?text='+barcode+'&size='+bcsize+'"/>');
-        $('link').attr('href','/print/css/librarybc.css');
+        $('link').attr('href','/print/css/librarycard.css');
+
         $('.footerimg').attr('src','/print/img/logoslibraryfooter.png');
         $('.logoimg').attr('src','/print/img/logoslibrarylogo.png');
 
-        // hide card control
-        // $("#controls").hide();
 
         if(type == 'Parent'){
           bcnum_pre = "";
@@ -104,10 +112,15 @@
           bcsize = 60;
           //reload barcode
           $('.barcode').html('<img src="'+bcurl+'?text='+barcode+'&size='+bcsize+'"/>');
-          $('link').attr('href','/print/css/pickupbc.css');
+          $('link').attr('href','/print/css/pickupcard.css');
           $('.footerimg').attr('src','/print/img/logospickupfooter.png');
           $('.logoimg').attr('src','/print/img/logospickuplogo.png');
-          $("#controls").hide();
+
+          $("#input_title").hide();
+          $("#buttons").hide();
+          $("#container_back").show();
+
+
         }
         else if (type=='Staff') {
           bcnum_pre = "";
@@ -120,7 +133,9 @@
           $('.footerimg').attr('src','/print/img/ahfooter.png');
           $('.logoimg').attr('src','/print/img/ahlogo.png');
           // show card controls
-          $("#controls").show();
+          $("#input_title").show();
+          $("#buttons").show();
+          $("#container_back").hide();
 
           $('#staff').click(function (){
             departmenttag ="";
@@ -151,7 +166,9 @@
           });
         }
         else{
-          $("#controls").hide();
+          $("#input_title").hide();
+          $("#buttons").hide();
+          $("#container_back").show();
         }
 
         $('#photoControl').draggable({
