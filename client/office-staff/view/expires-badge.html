@@ -1,0 +1,41 @@
+<template name="expiresBadge">
+  <div class="col-md-12" style="margin-bottom:20px; background:white;">
+    <h3>Expires a Badge</h3>
+    <table id="tbl_card_list" class="table dataTable no-footer">
+      <thead>
+        <tr>
+          <th>Barcode</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Associations</th>
+          <th>Expires Date</th>
+          <th>Expire</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each badges}}
+         <tr>
+           <td><strong><a href="card/{{barcode}}">{{barcode}}</a></strong></td>
+           <td>{{name}}</td>
+           <td>{{type}}</td>
+           <td>{{associations}}</td>
+           <td>{{expires}}</td>
+           <td><a><button class="btn btn-danger">Expires</button></a></td>
+         </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <script type="text/javascript">
+    $(function(){
+       $("#tbl_card_list").dataTable({
+         "aaSorting": [],
+         "bPaginate": true,
+         "bLengthChange": true,
+         "bFilter": true,
+         "bSort": true,
+         "bInfo": true
+       });
+     })
+  </script>
+</template>
