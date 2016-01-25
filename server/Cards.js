@@ -15,6 +15,11 @@ Meteor.methods({
         "profile" : profile
       })
     }
-
+  },
+  'expire_card' : function(id,expires_date){
+    Cards.update(
+      {_id :id},
+      {$set: {'expires': expires_date}}
+    );
   }
 });

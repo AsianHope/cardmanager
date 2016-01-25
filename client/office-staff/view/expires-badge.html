@@ -8,7 +8,7 @@
           <th>Name</th>
           <th>Type</th>
           <th>Associations</th>
-          <th>Expires Date</th>
+          <th>Expiry Date</th>
           <th>Expire</th>
         </tr>
       </thead>
@@ -20,7 +20,11 @@
            <td>{{type}}</td>
            <td>{{associations}}</td>
            <td>{{expires}}</td>
-           <td><a><button class="btn btn-danger">Expires</button></a></td>
+           {{#if is_expired expires}}
+            <td><a><button class="btn btn-warning expires" data-id="{{_id}}" disabled="true">Already Expired</button></a></td>
+           {{else}}
+            <td><a><button class="btn btn-danger expires" data-id="{{_id}}">Expire</button></a></td>
+           {{/if}}
          </tr>
         {{/each}}
       </tbody>
