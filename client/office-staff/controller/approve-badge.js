@@ -1,3 +1,7 @@
+var defaultstatus = {
+  class: '',
+  message: ''
+};
 
 Session.set("current_approve_card", DEFAULT_CARD);
 Session.set("current_current_approve_card_status", defaultstatus);
