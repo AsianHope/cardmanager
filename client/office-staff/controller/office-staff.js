@@ -1,4 +1,11 @@
 Template.officeStaff.events({
+  'change #expire_period':function(event){
+    var expire_period = $(event.target).val();
+    var now = new Date();
+    var date_after = new Date();
+    date_after.setMonth(now.getMonth() + expire_period);
+    $("#expires_date").val(moment(date_after).format("YYYY-MM-DD"));
+  },
   'submit .new_card': function(event, template) {
     event.preventDefault();
     var barcode = event.target.barcode.value;
@@ -6,7 +13,6 @@ Template.officeStaff.events({
     var type = event.target.type.value;
     var expires = event.target.expires.value;
     var associations = event.target.associations.value;
-    
     // generate associations string to array split by commas
     if (associations){
       var array_of_associations = associations.split(',');
