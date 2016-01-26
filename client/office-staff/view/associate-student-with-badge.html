@@ -1,0 +1,53 @@
+<template name="associateWithBadge">
+  <div class="col-md-12 content">
+    <h3>Associate Student with Badge</h3>
+      <p style="color:red;">{{associate_student_message}}</p>
+      <div class="col-md-6">
+        <form role="form" id="associate" method="post">
+          <div class="form-group">
+            <label>Student Barcode</label>
+            <input class="form-control" value="{{barcode}}" name="student_barcode" disabled="true" required/>
+          </div>
+          <div class="form-group">
+            <label>Parent</label>
+            <select name="parent_barcode" class="form-control" required>
+              <option value="">---Choose Parent---</option>
+              {{#each parents}}
+                <option value="{{barcode}}">{{barcode}}-{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <div class="col-md-6">
+          <img style="width:200px; height:300px;" src="/StudentPhotos/{{profile}}"/><br>
+        </div>
+        <div class="col-md-6">
+          <table class="tbl_single_card">
+            <tr>
+              <td>Barcode : </td>
+              <td>{{barcode}}</td>
+            </tr>
+            <tr>
+              <td>Name : </td>
+              <td>{{name}}</td>
+            </tr>
+            <tr>
+              <td>Type : </td>
+              <td>{{type}}</td>
+            </tr>
+            <tr>
+              <td>Associations : </td>
+              <td>{{associations}}</td>
+            </tr>
+            <tr>
+              <td>Expires : </td>
+              <td>{{expires}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+  </div>
+</template>

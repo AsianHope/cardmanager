@@ -1,10 +1,11 @@
 <template name="singleCard">
   <div class="col-md-12" style="background:white;">
+    <h3>Card Detail</h3>
       <div class="col-md-6">
         <img style="width:200px; height:300px;" src="/StudentPhotos/{{profile}}"/><br>
       </div>
       <div class="col-md-6">
-        <table>
+        <table class="tbl_single_card">
           <tr>
             <td>Barcode : </td>
             <td>{{barcode}}</td>
@@ -16,6 +17,10 @@
           <tr>
             <td>Type : </td>
             <td>{{type}}</td>
+          </tr>
+          <tr>
+            <td>Associations : </td>
+            <td>{{associations}}</td>
           </tr>
           <tr>
             <td>Expires : </td>

@@ -22,6 +22,13 @@ body {
 header{
   /*margin: 15px;*/
 }
+.content{
+  background: white;
+  padding: 20px;
+}
+.tbl_single_card tr td, .tbl_single_card tr th{
+  padding: 10px;
+}
 .bigphoto{
   margin-bottom: 1em;
 }

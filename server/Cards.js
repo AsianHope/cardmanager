@@ -21,5 +21,11 @@ Meteor.methods({
       {_id :id},
       {$set: {'expires': expires_date}}
     );
+  },
+  'add_association' : function(barcode,association){
+    Cards.update(
+      {'barcode' :barcode},
+      {"$push":{'associations':association}}
+    );
   }
 });

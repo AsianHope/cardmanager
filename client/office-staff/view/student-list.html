@@ -1,0 +1,39 @@
+<template name="studentList">
+  <div class="currentcard col-xs-12">
+    <h3>Student list</h3>
+    <table id="tbl_student_list" class="table dataTable no-footer">
+      <thead>
+        <tr>
+          <th>Barcode</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Expires</th>
+          <th>Associate with a badge</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each students}}
+         <tr>
+           <td><strong><a href="card/{{barcode}}">{{barcode}}</a></strong></td>
+           <td>{{name}}</td>
+           <td>{{type}}</td>
+           <td>{{expires}}</td>
+           <td><a href="/associate/{{barcode}}"><button class="btn btn-danger">Associate with Badge</button></a></td>
+         </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <script type="text/javascript">
+    $(function(){
+       $("#tbl_student_list").dataTable({
+         "aaSorting": [],
+         "bPaginate": true,
+         "bLengthChange": true,
+         "bFilter": true,
+         "bSort": true,
+         "bInfo": true
+       });
+     })
+  </script>
+</template>
