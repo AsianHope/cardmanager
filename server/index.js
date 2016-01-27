@@ -81,6 +81,59 @@ Accounts.onCreateUser(function(options, user) {
   return user;  
 });
 
+var failAttemptCount = 5;
+// Validate login attempts.
+Accounts.validateLoginAttempt(function(info){
+  var user = info.user;
+  if (!user) {
+	// This must be a terminal attempt.
+    if (info.methodName == 'login' && info.methodArguments[0].cardnumber) {
+       var ip = info.connection.clientAddress;
+       var count = Meteor.call('failedTerminalLogin', ip);
+       if (count == failAttemptCount) {
+         Meteor.call('banIP', ip);
+       }
+    }
+    return false;
+  }
+  // If there is a user, it's a normal user/password attempt.
+  var failAttempt = 0;
+  if (user.profile) {
+    failAttempt = user.profile.loginFailedAttempt ? user.profile.loginFailedAttempt : 0;
+  }
+  var loginAllowed = false;
+  if(info.error && info.error.error == 403){
+    if(failAttempt >= failAttemptCount) {
+      var now = moment(new Date()).format("x");
+      Meteor.users.update({_id: user._id}, {$set: {'profile.loginBlockSet': now}});
+      throw new Meteor.Error(403, 'You need to contact the admin!');
+    }
+    // increment the fail attempts
+    failAttempt++;
+    loginAllowed = false;
+  }
+  else {
+    // Login is successful, but if a set amount of time since the block was set
+    // hasn't elapsed why let them in?
+    var loginBlockSet = user.profile.loginBlockSet ? user.profile.loginBlockSet : 0;
+    if (loginBlockSet) {
+      var now = moment(new Date()).format("x");
+      // 1hr is 3600000 ms
+      // 1m is 60000 ms
+      if ((now - loginBlockSet) < 60000) {
+        // Throw the same error and move on as usual.
+        Meteor.users.update({_id: user._id}, {$set: {'profile.loginBlockSet': now}});
+        throw new Meteor.Error(403, 'You need to contact the admin!');
+      } 
+    }
+    // success login set to 0
+    failAttempt = 0;
+    loginAllowed = true;
+  }
+  Meteor.users.update({_id: user._id}, {$set: {'profile.loginFailedAttempt': failAttempt}});
+  return loginAllowed;
+});
+
 // Login handler for terminals.
 Accounts.registerLoginHandler(function(loginRequest) {
   var user, userId;
@@ -142,5 +195,42 @@ Meteor.methods({
     }
     console.log("returning: "+card.name)
     Session.set("currentcard", card);
+  },
+  failedTerminalLogin: function(ip) {
+	var count = 1;
+    if (FailedAttempts.find({"IP": ip}).count()) {
+      count = FailedAttempts.find({"IP": ip}).fetch()[0].count;
+      FailedAttempts.update({"IP": ip}, {$set: {'count': count +1}});
+    }
+    else {
+      FailedAttempts.insert({
+        "IP": ip,
+        "count": count
+      });
+    }
+    return count;
+  },
+  banIP: function(ip) {
+    if (FailedAttempts.findOne({"IP": ip})) {
+      count = FailedAttempts.find({"IP": ip}).fetch()[0].count;
+      // Make sure to only ban once and write to file once.
+      // Done by calling method at a certain count in validateLoginAttempt.
+        FailedAttempts.update({"IP": ip}, {$set: {'banned': 1}});
+
+	    var fs = Npm.require( 'fs' ) ;
+	    var path = Npm.require( 'path' ) ;
+	    
+	    // Write ip to file
+	    var app_path = fs.realpathSync('.');
+	    var base_path = app_path.replace(/\/\.meteor.*$/, '');
+
+	    if (!fs.existsSync(base_path)) {
+	      throw new Error(myPath + " does not exists");
+	    }
+	    var file_path = path.join(base_path, 'banned_list.txt');
+	     
+	    var buffer = new Buffer( ip + '\n') ;
+	    fs.appendFileSync( file_path, buffer ) ;
+      }
   }
 });
