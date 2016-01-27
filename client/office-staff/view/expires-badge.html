@@ -1,6 +1,6 @@
 <template name="expiresBadge">
   <div class="col-md-12" style="margin-bottom:20px; background:white;">
-    <h3>Expires a Badge</h3>
+    <h3>Expires/Renews a Badge</h3>
     <table id="tbl_card_list" class="table dataTable no-footer">
       <thead>
         <tr>
@@ -9,7 +9,7 @@
           <th>Type</th>
           <th>Associations</th>
           <th>Expiry Date</th>
-          <th>Expire</th>
+          <th>Expire/Renew</th>
         </tr>
       </thead>
       <tbody>
@@ -21,8 +21,11 @@
            <td>{{associations}}</td>
            <td>{{expires}}</td>
            {{#if is_expired expires}}
-            <td><a><button class="btn btn-warning expires" data-id="{{_id}}" disabled="true">Already Expired</button></a></td>
-           {{else}}
+            <td>
+              <label>Period (Month)</label>
+              <input id="renew_period" type="number" name="renew_period" placeholder="1" class="form-control"/>
+             <a><button class="btn btn-warning renew" data-id="{{_id}}">Renew</button></a></td>
+             {{else}}
             <td><a><button class="btn btn-danger expires" data-id="{{_id}}">Expire</button></a></td>
            {{/if}}
          </tr>
