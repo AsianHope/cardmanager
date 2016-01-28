@@ -8,8 +8,18 @@
 
 <template name="association">
   <div class="col-xs-3" style="padding: 0;">
-    <div class="photo">
-      <img src="StudentPhotos/{{this}}.JPG" style="width:100%"/>
+    <div class="photo_scan">
+      {{#if get_association this}}
+        {{#with get_association this}}
+          {{#if profile}}
+            <img src="/StudentPhotos/{{profile}}" style="width:100%"/>
+          {{else}}
+            <img src="/StudentPhotos/{{this}}.JPG" style="width:100%"/>
+          {{/if}}
+        {{/with}}
+      {{else}}
+        <img src="StudentPhotos/{{this}}.JPG" style="width:100%"/>
+      {{/if}}
     </div>
   </div>
 </template>

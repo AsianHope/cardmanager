@@ -5,7 +5,11 @@
       <div style="margin-bottom:30px;" class="col-sm-1">
         {{#with getCardByBarcode cardnumber}}
             <div class="phototext">{{name}}</div>
-            <img style="width: 100%;" src="/StudentPhotos/{{barcode}}.JPG"/><br>
+            {{#if profile}}
+              <img style="width: 100%;" src="/StudentPhotos/{{profile}}"/><br>
+            {{else}}
+              <img style="width: 100%;" src="/StudentPhotos/{{barcode}}.JPG"/><br>
+            {{/if}}
             <strong>{{barcode}}</strong><br>
         {{/with}}
         {{since scantimes.[0]}}

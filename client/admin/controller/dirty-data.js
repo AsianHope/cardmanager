@@ -130,5 +130,6 @@ Template.dirtyData.events({
         Session.set('admin_scan_message',invalid_card)
 
       }
+      e.target.barcode.value="";
     }
 });
