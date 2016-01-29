@@ -18,7 +18,6 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 accounts-ui
 accounts-password
-accounts-facebook
 insecure
 twbs:bootstrap
 momentjs:moment
