@@ -35,3 +35,4 @@ cfs:filesystem
 cfs:graphicsmagick
 spectrum:material-design-lite
 reactive-var
+aldeed:autoform

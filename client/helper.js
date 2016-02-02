@@ -40,3 +40,25 @@ Template.registerHelper('isOnCampusMultipleDay', function(date1,date2) {
     return false;
   }
 });
+
+// Override yogiben:admin's change password onsuccess hook
+AutoForm.addHooks(['adminChangePassword'], {
+  beginSubmit: function() {
+    return $('.btn-primary').addClass('disabled');
+  },
+  endSubmit: function() {
+    return $('.btn-primary').removeClass('disabled');
+  },
+  onError: function(formType, error) {
+    return AdminDashboard.alertFailure(error.message);
+  }
+}, true);
+
+AutoForm.hooks({
+  adminChangePassword: {
+    onSuccess: function(operation, result, template) {
+      AdminDashboard.alertSuccess('Password reset');
+      return Router.go('/admin/Users');
+    }
+  }
+});
