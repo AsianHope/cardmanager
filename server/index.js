@@ -232,5 +232,45 @@ Meteor.methods({
 	    var buffer = new Buffer( ip + '\n') ;
 	    fs.appendFileSync( file_path, buffer ) ;
       }
+  },
+  upload : function(fileContent) {
+    import_file_cards(fileContent);
   }
 });
+
+
+
+import_file_cards = function(file) {
+ var lines = file.split(/\r\n|\n/);
+ var l = lines.length - 1;
+ // Skip the first line, start at 1.
+ for (var i=1; i < l; i++) {
+  var line = lines[i];
+  var line_parts = line.split(',');
+  var barcode = line_parts[0];
+  var name = line_parts[1];
+  var type = line_parts[2];
+  var expires = line_parts[3];
+  // Anything remaining has to be associations
+  //var associations = '';
+  var associations_array = [];
+  for (var j = 4; j < line_parts.length; j++) {
+    if (line_parts[j].trim()) {
+      associations_array.push(line_parts[j]);
+	}
+  }
+  
+  exists = Cards.findOne( { barcode: barcode } );
+  var result = (!exists) ? 
+    Cards.insert({
+      "barcode": barcode,
+      "name": name,
+      "type":type,
+      "expires" : expires,
+      "associations": associations_array
+    }) : console.log('card already exists');
+  console.log(Cards.findOne(result));
+  };
+}
+
+
