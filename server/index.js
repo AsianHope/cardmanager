@@ -260,15 +260,15 @@ import_file_cards = function(file) {
   var line_parts = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
   line_parts = line_parts || [];
   
-  var barcode = (line_parts[0] != undefined) ? line_parts[0].trim() : null;
-  var name = (line_parts[1] != undefined) ? line_parts[1].trim() : null;
-  var type = (line_parts[2] != undefined) ? line_parts[2].trim() : null;
-  var expires = (line_parts[3] != undefined) ? line_parts[3].trim() : null;
+  var barcode = (line_parts[0] != undefined) ? line_parts[0].trim().replace(/(")/g, '') : null;
+  var name = (line_parts[1] != undefined) ? line_parts[1].trim().replace(/(")/g, '') : null;
+  var type = (line_parts[2] != undefined) ? line_parts[2].trim().replace(/(")/g, '') : null;
+  var expires = (line_parts[3] != undefined) ? line_parts[3].trim().replace(/(")/g, '') : null;
   // Anything remaining has to be associations
   //var associations = '';
   var associations_array = [];
   for (var j = 4; j < line_parts.length; j++) {
-    if (line_parts[j] != undefined && line_parts[j].trim()) {
+    if (line_parts[j] != undefined && line_parts[j].trim().replace(/(")/g, '')) {
       associations_array.push(line_parts[j]);
 	}
   }
