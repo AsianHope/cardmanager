@@ -234,43 +234,96 @@ Meteor.methods({
       }
   },
   upload : function(fileContent) {
-    import_file_cards(fileContent);
+    summary = import_file_cards(fileContent);
+    return summary;
   }
 });
 
 
 
 import_file_cards = function(file) {
+ var messages = '';
+ var total_records = 0;
+ var insert_records = 0;
+ var error_records = 0;
+ var update_records = 0;
+ var current_record = 1;
+ 
  var lines = file.split(/\r\n|\n/);
  var l = lines.length - 1;
+ total_records = l - 1;
  // Skip the first line, start at 1.
  for (var i=1; i < l; i++) {
+  current_record = i;
   var line = lines[i];
-  var line_parts = line.split(',');
-  var barcode = line_parts[0];
-  var name = line_parts[1];
-  var type = line_parts[2];
-  var expires = line_parts[3];
+  //var line_parts = line.split(',');
+  var line_parts = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+  line_parts = line_parts || [];
+  
+  var barcode = (line_parts[0] != undefined) ? line_parts[0].trim() : null;
+  var name = (line_parts[1] != undefined) ? line_parts[1].trim() : null;
+  var type = (line_parts[2] != undefined) ? line_parts[2].trim() : null;
+  var expires = (line_parts[3] != undefined) ? line_parts[3].trim() : null;
   // Anything remaining has to be associations
   //var associations = '';
   var associations_array = [];
   for (var j = 4; j < line_parts.length; j++) {
-    if (line_parts[j].trim()) {
+    if (line_parts[j] != undefined && line_parts[j].trim()) {
       associations_array.push(line_parts[j]);
 	}
   }
   
+  // Check values;
+  is_valid_barcode = (barcode != null) && Match.test(barcode, String);
+  is_valid_name = (name != null) && Match.test(name, String);
+  is_valid_type = (type != null) && Match.test(type, String) && BADGE_TYPE.indexOf(type) != -1;
+
+  var match_date = [];
+  if (expires != null) {
+    match_date = expires.match(/([0-9]{4})-([0-9]{2})-([0-9]{2})/g);
+  }
+  is_valid_expires = (match_date != null) && match_date.length;
+  
+  var status = 'record '+ current_record + ': bc: '+ is_valid_barcode+ ': name: '+ is_valid_name + 
+    ': type: '+ is_valid_type + ': expires: '+ is_valid_expires;
+  
+  if (!is_valid_expires || !is_valid_type || !is_valid_barcode || !is_valid_name) {
+	messages += 'Error on line ' + current_record + ': ' + line + '\r\n';
+	error_records++;
+	continue;
+  }
+  
   exists = Cards.findOne( { barcode: barcode } );
-  var result = (!exists) ? 
+  if (!exists) {
+	insert_records++;
     Cards.insert({
-      "barcode": barcode,
-      "name": name,
-      "type":type,
-      "expires" : expires,
-      "associations": associations_array
-    }) : console.log('card already exists');
-  console.log(Cards.findOne(result));
+        "barcode": barcode,
+        "name": name,
+        "type":type,
+        "expires" : expires,
+        "associations": associations_array
+      });
+  }
+  else {
+	update_records++;
+    Cards.update(
+    	{'barcode' :barcode},
+    	{$set: 
+    	  {
+    	   "name": name,
+           "type":type,
+           "expires" : expires,
+           "associations": associations_array
+          }
+    	});
+  }
   };
+  var summary = 'Out of '+ total_records + ' records, ' + insert_records + ' were inserted and ' + update_records + 
+    ' were updated. \r\n';
+  if (error_records) {
+    summary += 'There were ' + error_records + ' errors as follows: \r\n' + messages;
+  }
+  return summary;
 }
 
 

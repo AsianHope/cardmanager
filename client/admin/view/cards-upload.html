@@ -3,4 +3,7 @@
   <input class="input-file" id="fileInput" type="file" name="files[]">
   <button class="btn btn-primary" id="read_cards">Import</button>
  </form>
+ {{#if summary}}
+   <div class="ui message"><pre>{{summary}}</pre></div>
+ {{/if}}
 </template>
