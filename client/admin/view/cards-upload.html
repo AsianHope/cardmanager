@@ -1,4 +1,5 @@
 <template name="cardsUpload">
+ <h4>Upload a csv file</h4>
  <form class="well form-inline">
   <input class="input-file" id="fileInput" type="file" name="files[]">
   <button class="btn btn-primary" id="read_cards">Import</button>
@@ -6,4 +7,42 @@
  {{#if summary}}
    <div class="ui message"><pre>{{summary}}</pre></div>
  {{/if}}
+ {{> cardsUpdate }}
+</template>
+
+<template name="cardsUpdate">
+ <h4>Upload a zip file</h4>
+ <form class="well form-inline">
+  <input class="zip-input-file" id="zipfileInput" type="file" name="files[]">
+  <br>
+  <input type="checkbox" checked="{{extend}}" class="toggle-extend"/>Extend expiry date on updated cards
+  <br>
+  <label>Period (Month)</label>
+  <input id="renew_period" type="number" name="renew_period" placeholder="1" class="form-control"/>
+  <br>
+  <button class="btn btn-primary" id="read_zip">Update Photos</button>
+ </form>
+ {{#if zipsummary}}
+   <div class="ui message"><pre>{{zipsummary}}</pre></div>
+ {{/if}}
+ 
+ {{> summaryModalTemplate }}
+</template>
+
+<template name="summaryModalTemplate">
+  <div class="modal fade" id="summaryModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h4 class="modal-title">Summary</h4>
+        </div>
+
+        <div class="modal-body">
+          modal content to be built out
+        </div>
+
+      </div>
+    </div>
+  </div>
 </template>

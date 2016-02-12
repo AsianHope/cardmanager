@@ -236,6 +236,87 @@ Meteor.methods({
   upload : function(fileContent) {
     summary = import_file_cards(fileContent);
     return summary;
+  },
+  update: function(file, extend, expire_period) {
+    var messages = '';
+    var errors = '';
+    var total_count = 0;
+    var error_count = 0;
+    var update_count = 0;
+    var stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
+
+    var unzip = Meteor.npmRequire('unzip');
+	var fs = Npm.require('fs');
+	output = base_path+'/public/StudentPhotos/';
+
+
+	if (!fs.existsSync(output)) {
+	  fs.mkdirSync(output);
+	}
+	var response = Async.runSync(Meteor.bindEnvironment(function(done) {
+	  fs.createReadStream(base_path+"/public/Zips/"+file)
+	    .pipe(unzip.Parse())
+	    .on('entry', Meteor.bindEnvironment(function (entry) {
+	      var fileName = entry.path;
+	      var type = entry.type; // 'Directory' or 'File'
+	      var size = entry.size;
+	      if (fileName.match(/(.jpg|.jpeg)$/i)) {
+	        var barcode = fileName.replace(/(.jpg|.jpeg)$/i, '');
+	        var exists = Cards.findOne( { barcode: barcode } );
+	        if (!exists) {
+	          error_count++;
+	          total_count++;
+	          errors += '\r\n No match for image: '+fileName;
+	          stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
+	          entry.autodrain();
+	        }
+	        else {
+	          var profile = fileName;
+	          if (!extend) {
+	            Cards.update(
+	              {'barcode' :barcode},
+	              {$set:
+	                {
+	            	  "profile": profile
+	            	}
+	            });
+	          }
+	          else {
+	            var now = moment(new Date());
+	            var date_after = now.add(expire_period, 'months');
+	            var expire_date = moment(date_after).format("YYYY-MM-DD");
+	            Cards.update(
+	              {'barcode' :barcode},
+	              {$set:
+	                {
+	                  "expires": expire_date,
+	                  "profile": profile
+	                }
+	            });
+	          }
+	          
+	          update_count++;
+	          total_count++;
+	          stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
+	          entry.pipe(fs.createWriteStream(output+fileName));
+	        }
+	      } 
+	      else {
+	        error_count++;
+	        total_count++;
+	        errors += '\r\n Image was not a jpg/jpeg format: '+fileName;
+	        stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
+	        entry.autodrain();
+	      }
+	    })).on('close', function(close) {done(null, stats);});
+	  }));
+	  
+	var summary = 'Out of ' + response.result.total_count + ' records, ' + response.result.update_count + ' records were updated';
+	//messages = response.result.messages;
+	if (response.result.error_count) {
+		summary += '\r\n There were '+ response.result.error_count + ' errors as follows:'+response.result.errors;
+	}
+    return summary;
   }
 });
 

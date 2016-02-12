@@ -11,4 +11,7 @@ Meteor.publish("cardsoncampus", function () {
 Meteor.publish("images", function () {
   return Images.find();
 });
+Meteor.publish("zip", function () {
+  return Zipper.find();
+});
 Cards._ensureIndex({barcode: 1}, {unique: 1});
