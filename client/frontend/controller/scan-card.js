@@ -52,10 +52,10 @@ Template.scanCard.events({
     var barcode = event.target.text.value;
     card = Cards.findOne({'barcode':barcode})
     if (card){
-      var expires = moment(card.expires).format("MM D YYYY");
-      var now = moment(new Date()).format("MM D YYYY");
+      var expires = moment(card.expires).format('x');
+      var now = moment(new Date()).format('x');
       // if card expires
-      if(new Date(expires) > new Date(now)){
+      if(expires > now){
         scan = Scans.findOne({
           $and:[
             {'cardnumber':barcode},
