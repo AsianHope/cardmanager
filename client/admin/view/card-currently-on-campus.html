@@ -6,9 +6,9 @@
         {{#with getCardByBarcode cardnumber}}
             <div class="phototext">{{name}}</div>
             {{#if profile}}
-              <img style="width: 100%;" src="/StudentPhotos/{{profile}}"/><br>
+              <img style="width: 100%;" title="photo" src="/StudentPhotos/{{profile}}" onerror="this.src='/static/NoImageAvailable.gif'"/><br>
             {{else}}
-              <img style="width: 100%;" src="/StudentPhotos/{{barcode}}.JPG"/><br>
+              <img style="width: 100%;" title="photo" src="/StudentPhotos/{{barcode}}.JPG" onerror="this.src='/static/NoImageAvailable.gif'"/><br>
             {{/if}}
             <strong>{{barcode}}</strong><br>
         {{/with}}

@@ -12,13 +12,13 @@
       {{#if get_association this}}
         {{#with get_association this}}
           {{#if profile}}
-            <img src="/StudentPhotos/{{profile}}" style="width:100%"/>
+            <img title="photo" src="/StudentPhotos/{{profile}}" onerror="this.src='/static/NoImageAvailable.gif'" style="width:100%"/>
           {{else}}
-            <img src="/StudentPhotos/{{this}}.JPG" style="width:100%"/>
+            <img title="photo" src="/StudentPhotos/{{this}}.JPG" onerror="this.src='/static/NoImageAvailable.gif'" style="width:100%"/>
           {{/if}}
         {{/with}}
       {{else}}
-        <img src="StudentPhotos/{{this}}.JPG" style="width:100%"/>
+        <img title="photo" src="StudentPhotos/{{this}}.JPG" onerror="this.src='/static/NoImageAvailable.gif'" style="width:100%"/>
       {{/if}}
     </div>
   </div>
@@ -28,7 +28,7 @@
   <div class="col-sm-1" style="padding: 0;">
     <div class="miniphoto" id="{{this.barcode}}">
       <div class="phototext">{{this.name}}</div>
-      <img src="StudentPhotos/{{this.barcode}}.JPG" style="width:100%"/>
+      <img title="photo" src="StudentPhotos/{{this.barcode}}.JPG" onerror="this.src='/static/NoImageAvailable.gif'" style="width:100%"/>
 
     </div>
  </div>
