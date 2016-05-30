@@ -1,5 +1,5 @@
 Meteor.startup(function(){
-  
+
   // Testing: clear users each time.
   if (Meteor.users.find().count() !== 0) {
     console.log('not empty');
@@ -16,7 +16,7 @@ Meteor.startup(function(){
       }
     });
   }
-  
+
   var existing_users = Meteor.users.findOne();
   //if there's no data, please load some test data
   if(!existing_users){
@@ -31,7 +31,7 @@ Meteor.startup(function(){
 	    profile: { name: userData.name },
 	    cardnumber: userData.cardnumber ? userData.cardnumber : ''
 	  });
-	
+
       console.log(Meteor.users.find({_id: id}).fetch());
       //email verification
       Meteor.users.update({_id: id}, {$set:{'emails.0.verified': true}});
@@ -78,7 +78,7 @@ Meteor.startup(function(){
 Accounts.onCreateUser(function(options, user) {
   user.username = user.emails ? user.emails[0].address : user.username;
   user.profile = options.profile ? options.profile : {};
-  return user;  
+  return user;
 });
 
 var failAttemptCount = 5;
@@ -124,7 +124,7 @@ Accounts.validateLoginAttempt(function(info){
         // Throw the same error and move on as usual.
         Meteor.users.update({_id: user._id}, {$set: {'profile.loginBlockSet': now}});
         throw new Meteor.Error(403, 'You need to contact the admin!');
-      } 
+      }
     }
     // success login set to 0
     failAttempt = 0;
@@ -165,7 +165,7 @@ Accounts.registerLoginHandler(function(loginRequest) {
   var stampedToken = Accounts._generateStampedLoginToken();
   var hashStampedToken = Accounts._hashStampedToken(stampedToken);
 
-  Meteor.users.update(userId, 
+  Meteor.users.update(userId,
     {$push: {'services.resume.loginTokens': hashStampedToken}}
   );
 
@@ -219,7 +219,7 @@ Meteor.methods({
 
 	    var fs = Npm.require( 'fs' ) ;
 	    var path = Npm.require( 'path' ) ;
-	    
+
 	    // Write ip to file
 	    var app_path = fs.realpathSync('.');
 	    var base_path = app_path.replace(/\/\.meteor.*$/, '');
@@ -228,7 +228,7 @@ Meteor.methods({
 	      throw new Error(myPath + " does not exists");
 	    }
 	    var file_path = path.join(base_path, 'banned_list.txt');
-	     
+
 	    var buffer = new Buffer( ip + '\n') ;
 	    fs.appendFileSync( file_path, buffer ) ;
       }
@@ -245,7 +245,7 @@ Meteor.methods({
     var update_count = 0;
     var stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
 
-    var unzip = Meteor.npmRequire('unzip');
+  var unzip = Meteor.npmRequire('unzip');
 	var fs = Npm.require('fs');
 	output = base_path+'/public/StudentPhotos/';
 
@@ -257,60 +257,68 @@ Meteor.methods({
 	  fs.createReadStream(base_path+"/public/Zips/"+file)
 	    .pipe(unzip.Parse())
 	    .on('entry', Meteor.bindEnvironment(function (entry) {
-	      var fileName = entry.path;
-	      var type = entry.type; // 'Directory' or 'File'
-	      var size = entry.size;
-	      if (fileName.match(/(.jpg|.jpeg)$/i)) {
-	        var barcode = fileName.replace(/(.jpg|.jpeg)$/i, '');
-	        var exists = Cards.findOne( { barcode: barcode } );
-	        if (!exists) {
-	          error_count++;
-	          total_count++;
-	          errors += '\r\n No match for image: '+fileName;
-	          stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
-	          entry.autodrain();
-	        }
-	        else {
-	          var profile = fileName;
-	          if (!extend) {
-	            Cards.update(
-	              {'barcode' :barcode},
-	              {$set:
-	                {
-	            	  "profile": profile
-	            	}
-	            });
-	          }
-	          else {
-	            var now = moment(new Date());
-	            var date_after = now.add(expire_period, 'months');
-	            var expire_date = moment(date_after).format("YYYY-MM-DD");
-	            Cards.update(
-	              {'barcode' :barcode},
-	              {$set:
-	                {
-	                  "expires": expire_date,
-	                  "profile": profile
-	                }
-	            });
-	          }
-	          
-	          update_count++;
-	          total_count++;
-	          stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
-	          entry.pipe(fs.createWriteStream(output+fileName));
-	        }
-	      } 
-	      else {
-	        error_count++;
-	        total_count++;
-	        errors += '\r\n Image was not a jpg/jpeg format: '+fileName;
-	        stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
-	        entry.autodrain();
-	      }
+        var path = entry.path
+
+        // get filename in path
+        var fileName = /[^/]*$/.exec(path)[0];
+
+        if (fileName != ""){
+  	      var type = entry.type; // 'Directory' or 'File'
+  	      var size = entry.size;
+  	      if (fileName.match(/(.jpg|.jpeg|.JPG)$/i)) {
+  	        var barcode = fileName.replace(/(.jpg|.jpeg|.JPG)$/i, '');
+
+  	        var exists = Cards.findOne( { barcode: barcode } );
+  	        if (!exists) {
+  	          error_count++;
+  	          total_count++;
+  	          errors += '\r\n No match for image: '+fileName;
+  	          stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
+  	          entry.autodrain();
+  	        }
+  	        else {
+  	          var profile = fileName;
+  	          if (!extend) {
+  	            Cards.update(
+  	              {'barcode' :barcode},
+  	              {$set:
+  	                {
+  	            	  "profile": profile
+  	            	}
+  	            });
+  	          }
+  	          else {
+  	            var now = moment(new Date());
+  	            var date_after = now.add(expire_period, 'months');
+  	            var expire_date = moment(date_after).format("YYYY-MM-DD");
+  	            Cards.update(
+  	              {'barcode' :barcode},
+  	              {$set:
+  	                {
+  	                  "expires": expire_date,
+  	                  "profile": profile
+  	                }
+  	            });
+  	          }
+
+  	          update_count++;
+  	          total_count++;
+  	          stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
+              // write file to public/StudentPhotos/
+              entry.pipe(fs.createWriteStream(output+fileName));
+            }
+  	      }
+  	      else {
+  	        error_count++;
+  	        total_count++;
+  	        errors += '\r\n Image was not a jpg/jpeg format: '+fileName;
+  	        stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
+  	        entry.autodrain();
+  	      }
+        }
 	    })).on('close', function(close) {done(null, stats);});
 	  }));
-	  
+
 	var summary = 'Out of ' + response.result.total_count + ' records, ' + response.result.update_count + ' records were updated';
 	//messages = response.result.messages;
 	if (response.result.error_count) {
@@ -329,7 +337,7 @@ import_file_cards = function(file) {
  var error_records = 0;
  var update_records = 0;
  var current_record = 1;
- 
+
  var lines = file.split(/\r\n|\n/);
  var l = lines.length - 1;
  total_records = l - 1;
@@ -340,7 +348,7 @@ import_file_cards = function(file) {
   //var line_parts = line.split(',');
   var line_parts = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
   line_parts = line_parts || [];
-  
+
   var barcode = (line_parts[0] != undefined) ? line_parts[0].trim().replace(/(")/g, '') : null;
   var name = (line_parts[1] != undefined) ? line_parts[1].trim().replace(/(")/g, '') : null;
   var type = (line_parts[2] != undefined) ? line_parts[2].trim().replace(/(")/g, '') : null;
@@ -353,7 +361,7 @@ import_file_cards = function(file) {
       associations_array.push(line_parts[j]);
 	}
   }
-  
+
   // Check values;
   is_valid_barcode = (barcode != null) && Match.test(barcode, String);
   is_valid_name = (name != null) && Match.test(name, String);
@@ -364,16 +372,16 @@ import_file_cards = function(file) {
     match_date = expires.match(/([0-9]{4})-([0-9]{2})-([0-9]{2})/g);
   }
   is_valid_expires = (match_date != null) && match_date.length;
-  
-  var status = 'record '+ current_record + ': bc: '+ is_valid_barcode+ ': name: '+ is_valid_name + 
+
+  var status = 'record '+ current_record + ': bc: '+ is_valid_barcode+ ': name: '+ is_valid_name +
     ': type: '+ is_valid_type + ': expires: '+ is_valid_expires;
-  
+
   if (!is_valid_expires || !is_valid_type || !is_valid_barcode || !is_valid_name) {
 	messages += 'Error on line ' + current_record + ': ' + line + '\r\n';
 	error_records++;
 	continue;
   }
-  
+
   exists = Cards.findOne( { barcode: barcode } );
   if (!exists) {
 	insert_records++;
@@ -389,7 +397,7 @@ import_file_cards = function(file) {
 	update_records++;
     Cards.update(
     	{'barcode' :barcode},
-    	{$set: 
+    	{$set:
     	  {
     	   "name": name,
            "type":type,
@@ -399,12 +407,10 @@ import_file_cards = function(file) {
     	});
   }
   };
-  var summary = 'Out of '+ total_records + ' records, ' + insert_records + ' were inserted and ' + update_records + 
+  var summary = 'Out of '+ total_records + ' records, ' + insert_records + ' were inserted and ' + update_records +
     ' were updated. \r\n';
   if (error_records) {
     summary += 'There were ' + error_records + ' errors as follows: \r\n' + messages;
   }
   return summary;
 }
-
-
