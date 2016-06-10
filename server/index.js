@@ -247,7 +247,11 @@ Meteor.methods({
 
   var unzip = Meteor.npmRequire('unzip');
 	var fs = Npm.require('fs');
-	output = base_path+'/public/StudentPhotos/';
+	//output = base_path+'/public/StudentPhotos/';
+	// write to directory outside of meteor
+	// this needs to pre-exist, meteor will not create it
+    path = Npm.require('path');
+    output = path.join(process.env.PWD, '..', 'OutOfRootUploads/StudentPhotos/');
 
 
 	if (!fs.existsSync(output)) {
