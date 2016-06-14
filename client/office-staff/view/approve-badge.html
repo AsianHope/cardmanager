@@ -16,9 +16,9 @@
       <div class="col-md-6">
         <div class="col-md-6">
           {{#if current_approve_card.profile }}
-            <img title="photo" style="width:200px; height:270px;" src="/StudentPhotos/{{current_approve_card.profile}}" onerror="this.src='/static/NoImageAvailable.gif'"/><br>
+            <img title="photo" style="width:200px; height:270px;" src="/static/{{current_approve_card.profile}}" onerror="this.src='/static/NoImageAvailable.gif'"/><br>
           {{else}}
-            <img title="photo" src="/StudentPhotos/{{current_approve_card.barcode}}.JPG" onerror="this.src='/static/NoImageAvailable.gif'"/><br>
+            <img title="photo" src="/static/{{current_approve_card.barcode}}.JPG" onerror="this.src='/static/NoImageAvailable.gif'"/><br>
           {{/if}}
         </div>
         <div class="col-md-6">
