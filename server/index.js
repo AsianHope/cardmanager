@@ -251,7 +251,7 @@ Meteor.methods({
 	// write to directory outside of meteor
 	// this needs to pre-exist, meteor will not create it
     path = Npm.require('path');
-    output = path.join(process.env.PWD, '..', 'OutOfRootUploads/StudentPhotos/');
+    output = path.join(process.env.PWD, '..', 'static/');
 
 
 	if (!fs.existsSync(output)) {
@@ -265,7 +265,7 @@ Meteor.methods({
 
         // get filename in path
         var fileName = /[^/]*$/.exec(path)[0];
-
+        
         if (fileName != ""){
   	      var type = entry.type; // 'Directory' or 'File'
   	      var size = entry.size;
@@ -282,34 +282,54 @@ Meteor.methods({
   	        }
   	        else {
   	          var profile = fileName;
-  	          if (!extend) {
-  	            Cards.update(
-  	              {'barcode' :barcode},
-  	              {$set:
-  	                {
-  	            	  "profile": profile
-  	            	}
-  	            });
-  	          }
-  	          else {
-  	            var now = moment(new Date());
-  	            var date_after = now.add(expire_period, 'months');
-  	            var expire_date = moment(date_after).format("YYYY-MM-DD");
-  	            Cards.update(
-  	              {'barcode' :barcode},
-  	              {$set:
-  	                {
-  	                  "expires": expire_date,
-  	                  "profile": profile
-  	                }
-  	            });
-  	          }
 
   	          update_count++;
   	          total_count++;
   	          stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};
-              // write file to public/StudentPhotos/
+              
+  	          // write file to outside assets dir
               entry.pipe(fs.createWriteStream(output+fileName));
+              var fileObj = new FS.File(output+fileName);
+
+              fileObj.name(barcode+"."+fileObj.extension());
+              // set file name
+              Images.insert(fileObj, function (err, Obj) {
+                if (err){
+                  error_count++;
+                  errors += '\r\n failed to upload image: '+fileName;
+                  stats = {'errors': errors, 'messages': messages, 'total_count': total_count, 'error_count': error_count, 'update_count': update_count};                       
+                }
+                else{
+                 profile = Obj.collectionName+"-"+Obj._id+"-"+Obj.name();
+     	          if (!extend) {
+     	            Cards.update(
+     	              {'barcode' :barcode},
+     	              {$set:
+     	                {
+     	            	  "profile": profile
+     	            	}
+     	            });
+     	          }
+     	          else {
+     	            var now = moment(new Date());
+     	            var date_after = now.add(expire_period, 'months');
+     	            var expire_date = moment(date_after).format("YYYY-MM-DD");
+     	            Cards.update(
+     	              {'barcode' :barcode},
+     	              {$set:
+     	                {
+     	                  "expires": expire_date,
+     	                  "profile": profile
+     	                }
+     	            });
+     	          }
+
+                  //remove file
+              	  if (fs.existsSync(output+fileName)) {
+              	    fs.unlink(output+fileName);
+              	  }
+                }
+              });
             }
   	      }
   	      else {
