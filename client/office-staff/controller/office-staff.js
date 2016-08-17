@@ -1,10 +1,12 @@
 Template.officeStaff.events({
   'change #expire_period':function(event){
-    var expire_period = $(event.target).val();
-    var now = new Date();
-    var date_after = new Date();
-    date_after.setMonth(now.getMonth() + expire_period);
-    $("#expires_date").val(moment(date_after).format("YYYY-MM-DD"));
+    var expire_period = parseInt($(event.target).val());
+    var today_date = new Date();
+    var current_month = today_date.getMonth();
+    var months = current_month + expire_period;
+    var date = new Date();
+    date.setMonth(months);
+    $("#expires_date").val(moment(date).format("YYYY-MM-DD"));
   },
   'submit .new_card': function(event, template) {
     event.preventDefault();
