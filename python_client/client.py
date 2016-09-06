@@ -8,16 +8,31 @@ import urllib2
 from multiprocessing.dummy import Pool as ThreadPool
 import os
 import calendar
+import requests
+import socket
+
+from credentials import METEOR_USERNAME
+from credentials import METEOR_PASSWORD
+from credentials import WEBHOOKURL
+
+USERNAME = socket.gethostname()
+WEBHOOKURL = 'https://hooks.slack.com/services/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'
+messagequeue = []
+
+PARENT_DIMENSIONS_X = 450
+PARENT_DIMENSIONS_Y = 680
+CHILD_DIMENSIONS_X = 150
+CHILD_DIMENSIONS_Y = 200
 
 
 class MyProgram:
     def __init__(self):
-
+        slackLog("Gate scanner started.")
         self.parents= {}
         #load parents
         self.client = MeteorClient('ws://chloe.asianhope.org:8080/websocket',debug=False)
         self.client.connect()
-        self.client.login('test@test.com','test')
+        self.client.login(METEOR_USERNAME,METEOR_PASSWORD)
         self.client.subscribe('cards')
         time.sleep(1) #give it some time to finish loading everything
 
@@ -35,30 +50,10 @@ class MyProgram:
                 self.parents.update({barcode:card})
 
             except KeyError:
-                print 'card has missing data, oh well.'
+                slackLog(barcode+' has missing data',delay=True)
+
                 pass
 
-        # try:
-        #     f = open('parents.csv')
-        # except:
-        #    parent = None
-        #    md = gtk.MessageDialog(parent, gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_INFO,
-        #             gtk.BUTTONS_CLOSE, "Can't open file!")
-        #    md.run()
-        #    sys.exit(1)
-        # for line in f:
-        #     line = line.strip()
-        #     info = line.split(',')
-        #     pid = info[0]
-        #     student_list = []
-        #     i = 0
-        #
-        #     for item in info:
-        #         if(i>=1): #parent_id, name, student1, student2, student3... student9
-        #             student_list.append(info[i])
-        #         i+=1
-        #
-        #     self.parents.update({pid:student_list})
 
         #create a new window
         self.app_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
@@ -89,7 +84,7 @@ class MyProgram:
         spacer1.add(self.pnamelabel)
 
         pixbuf = gtk.gdk.pixbuf_new_from_file("static/logo.png")
-        scaled_buf = pixbuf.scale_simple(177,266,gtk.gdk.INTERP_BILINEAR)
+        scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
 
         self.pickup_students = ['0']*9 #seed the list with the size we want
         for i in range(0,9):
@@ -132,7 +127,7 @@ class MyProgram:
 
         self.image = gtk.Image()
         pixbuf = gtk.gdk.pixbuf_new_from_file("static/logo.png")
-        scaled_buf = pixbuf.scale_simple(472,709,gtk.gdk.INTERP_BILINEAR)
+        scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
         self.image.set_from_pixbuf(scaled_buf)
         self.image.show()
 
@@ -148,14 +143,16 @@ class MyProgram:
         return
 
     def search_button_clicked(self, widget, data=None):
+        associations = []
         for i in range(0,9):
             #make sure all pictures are reset
             pixbuf = gtk.gdk.pixbuf_new_from_file("static/logo.png")
-            scaled_buf = pixbuf.scale_simple(177,266,gtk.gdk.INTERP_BILINEAR)
+            scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
             self.pickup_students[i].set_from_pixbuf(scaled_buf)
 
         #grab pid
         pid = self.entry.get_text()
+        slackLog('Scanned card: '+pid,delay=True)
 
         #do a lookup for the name
         try:
@@ -166,7 +163,7 @@ class MyProgram:
 
             associations = parent_card.get('associations',[])
 
-            print(parent_card)
+            slackLog('```'+str(parent_card)+'```',delay=True)
             pname = parent_card.get('name', pid)
             parent_picture = parent_card.get('profile',pid+".JPG")
             expires = parent_card.get('expires',"Expiry not set")
@@ -179,44 +176,51 @@ class MyProgram:
 
 
         except KeyError:
+            slackLog('Scanned card: '+pid+' could not be found',delay=True)
             #display an error
             pmarkup = '<span color="red" size="64000">Card Not Found</span>'
             self.pnamelabel.set_markup(pmarkup)
             self.pnamelabel.show()
             names = "NA"
+            #reset everything
+            self.entry.set_text('')
+            self.app_window.set_focus(self.entry)
+            self.app_window.show()
 
     #load pictures
         #if the parent picture exists
         try:
-            print 'loading parent picture: '+str(pid)
+            slackLog('loading parent picture: '+str(pid),delay=True)
             fetchPhotosByID(parent_picture)
             pixbuf = gtk.gdk.pixbuf_new_from_file("resource/"+parent_picture)
-            scaled_buf = pixbuf.scale_simple(472,709,gtk.gdk.INTERP_BILINEAR)
+            scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
             self.image.set_from_pixbuf(scaled_buf)
 
         #if there is no parent picture, indicate it.
         except Exception as inst:
-            print inst
+            slackLog("No parent picture for: "+pid,delay=True)
             pixbuf = gtk.gdk.pixbuf_new_from_file("static/NA.JPG")
-            scaled_buf = pixbuf.scale_simple(472,709,gtk.gdk.INTERP_BILINEAR)
+            scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
             self.image.set_from_pixbuf(scaled_buf)
 
         #try and load the studnts starting after the parents name
         i = 0
-        pool = ThreadPool(len(associations))
-        results = pool.map(fetchPhotosByID,associations)
+        if(len(associations)):
+            pool = ThreadPool(len(associations))
+            results = pool.map(fetchPhotosByID,associations)
         for sid in associations:
             #if the student picture exists locally, load it
 
             try:
                 pixbuf = gtk.gdk.pixbuf_new_from_file("resource/"+sid+".JPG")
-                scaled_buf = pixbuf.scale_simple(177,266,gtk.gdk.INTERP_BILINEAR)
+                scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
                 self.pickup_students[i].set_from_pixbuf(scaled_buf)
             #if not, load the NA picture to indicate a student w/o a picture
             except:
-                print "Unexpected error:", sys.exc_info()[0]
+                print("Unexpected error:```")
+                print sys.exc_info()[0]
                 pixbuf = gtk.gdk.pixbuf_new_from_file("static/NA.JPG")
-                scaled_buf = pixbuf.scale_simple(177,266,gtk.gdk.INTERP_BILINEAR)
+                scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
                 self.pickup_students[i].set_from_pixbuf(scaled_buf)
             i+=1
 
@@ -232,7 +236,6 @@ def main():
 
 def fetchPhotosByID(sid):
     #if it's coming in with a file extension, don't add one
-    print sid[-4:]
     if (sid[-4:] == '.jpg') or (sid[-4:] == '.JPG'):
         url = 'http://chloe.asianhope.org/static/'+sid
     else:
@@ -260,13 +263,28 @@ def fetchPhotosByID(sid):
 
     #simple cache: less than a week old? replace
     if mtime < (calendar.timegm(time.gmtime())-(7*24*60*60)):
-        print("writing to cache")
+        slackLog("writing to cache: "+filename,delay=True)
         f = open(filename, "wb")
         f.write(response.read())
         f.close()
 
     if response:
         response.close()
+
+def slackLog(message,icon_emoji=':guardsman:',delay=False):
+    global messagequeue
+    if not delay:
+        r = requests.post(WEBHOOKURL,data={'payload':'{"text":"'+message+'","username":"'+USERNAME+'","icon_emoji":"'+icon_emoji+'"}'})
+    else:
+        if len(messagequeue)<10:
+            messagequeue.append(message)
+        else:
+            message_with_breaks =''
+            for mess in messagequeue:
+                message_with_breaks = message_with_breaks+'\n'+str(mess)
+            message_with_breaks = message_with_breaks+'\n'+message
+            r = requests.post(WEBHOOKURL,data={'payload':'{"text":"'+message_with_breaks+'","username":"'+USERNAME+'","icon_emoji":"'+icon_emoji+'"}'})
+            messagequeue = []
 
 if __name__=="__main__":
     MyProgram()
