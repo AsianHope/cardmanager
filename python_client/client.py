@@ -16,7 +16,6 @@ from credentials import METEOR_PASSWORD
 from credentials import WEBHOOKURL
 
 USERNAME = socket.gethostname()
-WEBHOOKURL = 'https://hooks.slack.com/services/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'
 messagequeue = []
 
 PARENT_DIMENSIONS_X = 450
@@ -34,9 +33,10 @@ class MyProgram:
         self.client.connect()
         self.client.login(METEOR_USERNAME,METEOR_PASSWORD)
         self.client.subscribe('cards')
-        time.sleep(1) #give it some time to finish loading everything
+        time.sleep(3) #give it some time to finish loading everything
 
         self.all_cards = self.client.find('cards')
+        slackLog("Pulled records for: "+str(len(self.all_cards))+" cards")
 
 
         for card in self.all_cards:
@@ -157,7 +157,9 @@ class MyProgram:
         #do a lookup for the name
         try:
             #get parent information
-            parent_card = self.client.find_one('cards', selector={'barcode': pid})
+            #parent_card = self.client.find_one('cards', selector={'barcode': pid})
+            parent_card = self.parents[pid]
+
             if not parent_card:
                 raise(KeyError)
 
