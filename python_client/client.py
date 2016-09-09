@@ -1,6 +1,12 @@
 from MeteorClient import MeteorClient
-import pygtk
-import gtk
+# import pygtk
+# import gtk
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository.GdkPixbuf import Pixbuf,InterpType
+
 import fileinput
 import errno, sys
 import time
@@ -18,8 +24,10 @@ from credentials import WEBHOOKURL
 USERNAME = socket.gethostname()
 messagequeue = []
 
-PARENT_DIMENSIONS_X = 450
-PARENT_DIMENSIONS_Y = 680
+# PARENT_DIMENSIONS_X = 450
+# PARENT_DIMENSIONS_Y = 680
+PARENT_DIMENSIONS_X = 320
+PARENT_DIMENSIONS_Y = 442
 CHILD_DIMENSIONS_X = 150
 CHILD_DIMENSIONS_Y = 200
 
@@ -53,46 +61,55 @@ class MyProgram:
                 slackLog(barcode+' has missing data',delay=True)
 
                 pass
+        # load style css for template
+        screen = Gdk.Screen.get_default()
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_path('style.css')
+        context = Gtk.StyleContext()
+        context.add_provider_for_screen(screen, css_provider,
+                                        Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
+        # connect to glade teamplate
+        self.gladefile = "cardmanager.glade"
+        self.glade = Gtk.Builder()
+        self.glade.add_from_file(self.gladefile)
+        self.glade.connect_signals(self)
 
-        #create a new window
-        self.app_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        #get window from glade
+        self.app_window=self.glade.get_object("main_window") # Window Name in GLADE
         self.app_window.fullscreen()
-        self.app_window.set_title("POCAR")
+        # quit app
+        self.app_window.connect("delete-event",Gtk.main_quit)
 
         #change color of window??
         #self.green = gtk.gdk.color_parse('green')
         #self.black = gtk.gdk.color_parse('black')
         #self.app_window.modify_bg(gtk.STATE_NORMAL,self.black)
 
-        #add entry and search fields
-        self.entry = gtk.Entry()
-        self.button_search = gtk.Button("Search")
+        # get objects from glade
+        self.header_title = self.glade.get_object("header_title")
+        self.parent_image = self.glade.get_object("img_parent")
+        self.child_container = self.glade.get_object("grid1")
+        self.button_search = self.glade.get_object("btn_search")
+        self.entry = self.glade.get_object("search_input")
+        self.pname = self.glade.get_object("lbl_pname")
+        self.pbarcode = self.glade.get_object("lbl_pbarcode")
+        self.pexpires = self.glade.get_object("lbl_pexpires")
+
+        #add event to button_search
         self.button_search.connect("clicked", self.search_button_clicked, "3")
-        self.button_search.set_size_request(50,50)
 
-        #add image display area
-        self.student_pic = gtk.EventBox()
-        self.student_id= gtk.EventBox()
 
-        spacer1 = gtk.EventBox()
-        spacer2 = gtk.EventBox()
-
-        self.pnamelabel=gtk.Label("Parentsen, Parentina")
-        init = '<span size="64000">Logos Pickup Card System</span>'
-        self.pnamelabel.set_markup(init)
-        spacer1.add(self.pnamelabel)
-
-        pixbuf = gtk.gdk.pixbuf_new_from_file("static/logo.png")
-        scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
+        # display children images
+        pixbuf = Pixbuf.new_from_file("static/logo.png")
+        scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,InterpType.BILINEAR)
 
         self.pickup_students = ['0']*9 #seed the list with the size we want
         for i in range(0,9):
-            self.pickup_students[i] = gtk.Image()
+            self.pickup_students[i] = Gtk.Image()
             self.pickup_students[i].set_from_pixbuf(scaled_buf)
-            self.pickup_students[i].show()
 
-        self.label=gtk.Table(3,3,True)
+        self.label=Gtk.Table(3,3,True)
         self.label.attach(self.pickup_students[0],0,1,0,1)
         self.label.attach(self.pickup_students[1],1,2,0,1)
         self.label.attach(self.pickup_students[2],2,3,0,1)
@@ -100,54 +117,34 @@ class MyProgram:
         self.label.attach(self.pickup_students[3],0,1,1,2)
         self.label.attach(self.pickup_students[4],1,2,1,2)
         self.label.attach(self.pickup_students[5],2,3,1,2)
-
         self.label.attach(self.pickup_students[6],0,1,2,3)
         self.label.attach(self.pickup_students[7],1,2,2,3)
         self.label.attach(self.pickup_students[8],2,3,2,3)
+        self.label.set_col_spacings(10)
+        self.label.set_row_spacings(10)
+        # add lebel of image to container in glade
+        self.child_container.add(self.label)
 
-        vbox = gtk.VBox()
-        student_info = gtk.HBox()
-        controls = gtk.VBox()
-        bottom_area = gtk.HBox()
+        # display parent picture
+        pixbuf = Pixbuf.new_from_file("static/logo.png")
+        scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,InterpType.BILINEAR)
+        self.parent_image.set_from_pixbuf(scaled_buf)
 
-        controls.pack_start(self.entry,fill=False)
-        controls.pack_start(self.button_search,fill=False)
 
-        student_info.pack_start(self.student_pic,fill=False)
-        #student_info.pack_start(self.student_id,fill=False)
-        student_info.pack_start(self.label, True, True, 0)
-
-        bottom_area.pack_start(spacer1, fill=False)
-        bottom_area.pack_start(controls)
-       # bottom_area.pack_start(spacer2)
-
-        vbox.pack_start(student_info)
-        vbox.pack_start(bottom_area)
-        self.app_window.add(vbox)
-
-        self.image = gtk.Image()
-        pixbuf = gtk.gdk.pixbuf_new_from_file("static/logo.png")
-        scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
-        self.image.set_from_pixbuf(scaled_buf)
-        self.image.show()
-
-        self.student_pic.add(self.image)
-
-        self.button_search.set_flags(gtk.CAN_DEFAULT)
+        # self.button_search.set_flags(Gtk.CAN_DEFAULT)
         self.button_search.grab_default()
         self.entry.set_activates_default(True)
         self.app_window.set_focus(self.entry)
 
         self.app_window.show_all()
-
         return
 
     def search_button_clicked(self, widget, data=None):
         associations = []
         for i in range(0,9):
             #make sure all pictures are reset
-            pixbuf = gtk.gdk.pixbuf_new_from_file("static/logo.png")
-            scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
+            pixbuf = Pixbuf.new_from_file("static/logo.png")
+            scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,InterpType.BILINEAR)
             self.pickup_students[i].set_from_pixbuf(scaled_buf)
 
         #grab pid
@@ -159,70 +156,77 @@ class MyProgram:
             #get parent information
             #parent_card = self.client.find_one('cards', selector={'barcode': pid})
             parent_card = self.parents[pid]
+            slackLog('```'+str(parent_card)+'```',delay=True)
 
             if not parent_card:
-                raise(KeyError)
+                self.header_title.set_text("Invalid Card!")
+                self.pname.set_text("Card Not Found!")
+                self.pbarcode.set_text("XXXX")
+                self.pexpires.set_text("xxxx-xx-xx")
+                pixbuf = Pixbuf.new_from_file("static/NA.JPG")
+                scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,InterpType.BILINEAR)
+                self.parent_image.set_from_pixbuf(scaled_buf)
+            else:
+                pname = parent_card.get('name', pid)
+                parent_picture = parent_card.get('profile',pid+".JPG")
+                expires = parent_card.get('expires',"Expiry not set")
+                barcode = parent_card.get('barcode',"Barcode not set")
+                associations = parent_card.get('associations',[])
 
-            associations = parent_card.get('associations',[])
+                self.header_title.set_text("Scanned!")
+                self.pname.set_text(pname)
+                self.pbarcode.set_text(barcode)
+                self.pexpires.set_text(expires)
 
-            slackLog('```'+str(parent_card)+'```',delay=True)
-            pname = parent_card.get('name', pid)
-            parent_picture = parent_card.get('profile',pid+".JPG")
-            expires = parent_card.get('expires',"Expiry not set")
-
-            #display parent's name
-            pmarkup = '<span size="50000">'+pname+'</span>\n<span size="30000">'+pid+'</span>\n<span size="15000">'+expires+'</span>'
-
-            self.pnamelabel.set_markup(pmarkup)
-            self.pnamelabel.show()
-
+                # load picture
+                try:
+                    slackLog('loading parent picture: '+str(pid),delay=True)
+                    fetchPhotosByID(parent_picture)
+                    pixbuf = Pixbuf.new_from_file("resource/"+parent_picture)
+                    scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,InterpType.BILINEAR)
+                    self.parent_image.set_from_pixbuf(scaled_buf)
+                except Exception as inst:
+                    slackLog("No parent picture for: "+pid,delay=True)
+                    pixbuf = Pixbuf.new_from_file("static/unknown.jpg")
+                    scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,InterpType.BILINEAR)
+                    self.parent_image.set_from_pixbuf(scaled_buf)
 
         except KeyError:
             slackLog('Scanned card: '+pid+' could not be found',delay=True)
             #display an error
-            pmarkup = '<span color="red" size="64000">Card Not Found</span>'
-            self.pnamelabel.set_markup(pmarkup)
-            self.pnamelabel.show()
-            names = "NA"
+            self.header_title.set_text("Invalid Card!")
+            self.pname.set_text("Card Not Found!")
+            self.pbarcode.set_text("XXXX")
+            self.pexpires.set_text("xxxx-xx-xx")
+
+            pixbuf = Pixbuf.new_from_file("static/NA.JPG")
+            scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,InterpType.BILINEAR)
+            self.parent_image.set_from_pixbuf(scaled_buf)
+
             #reset everything
             self.entry.set_text('')
             self.app_window.set_focus(self.entry)
             self.app_window.show()
 
-    #load pictures
-        #if the parent picture exists
-        try:
-            slackLog('loading parent picture: '+str(pid),delay=True)
-            fetchPhotosByID(parent_picture)
-            pixbuf = gtk.gdk.pixbuf_new_from_file("resource/"+parent_picture)
-            scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
-            self.image.set_from_pixbuf(scaled_buf)
-
-        #if there is no parent picture, indicate it.
-        except Exception as inst:
-            slackLog("No parent picture for: "+pid,delay=True)
-            pixbuf = gtk.gdk.pixbuf_new_from_file("static/NA.JPG")
-            scaled_buf = pixbuf.scale_simple(PARENT_DIMENSIONS_X,PARENT_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
-            self.image.set_from_pixbuf(scaled_buf)
 
         #try and load the studnts starting after the parents name
         i = 0
         if(len(associations)):
+
             pool = ThreadPool(len(associations))
             results = pool.map(fetchPhotosByID,associations)
         for sid in associations:
             #if the student picture exists locally, load it
-
             try:
-                pixbuf = gtk.gdk.pixbuf_new_from_file("resource/"+sid+".JPG")
-                scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
+                pixbuf = Pixbuf.new_from_file("resource/"+sid+".JPG")
+                scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,InterpType.BILINEAR)
                 self.pickup_students[i].set_from_pixbuf(scaled_buf)
             #if not, load the NA picture to indicate a student w/o a picture
             except:
                 print("Unexpected error:```")
                 print sys.exc_info()[0]
-                pixbuf = gtk.gdk.pixbuf_new_from_file("static/NA.JPG")
-                scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,gtk.gdk.INTERP_BILINEAR)
+                pixbuf = Pixbuf.new_from_file("static/NA.JPG")
+                scaled_buf = pixbuf.scale_simple(CHILD_DIMENSIONS_X,CHILD_DIMENSIONS_Y,InterpType.BILINEAR)
                 self.pickup_students[i].set_from_pixbuf(scaled_buf)
             i+=1
 
@@ -233,7 +237,7 @@ class MyProgram:
         self.app_window.set_focus(self.entry)
         self.app_window.show()
 def main():
-    gtk.main()
+    Gtk.main()
     return 0
 
 def fetchPhotosByID(sid):
