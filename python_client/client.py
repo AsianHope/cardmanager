@@ -21,6 +21,8 @@ from credentials import METEOR_USERNAME
 from credentials import METEOR_PASSWORD
 from credentials import WEBHOOKURL
 
+from datetime import date
+
 USERNAME = socket.gethostname()
 messagequeue = []
 
@@ -87,6 +89,8 @@ class MyProgram:
         #self.app_window.modify_bg(gtk.STATE_NORMAL,self.black)
 
         # get objects from glade
+        self.header = self.glade.get_object("header")
+        self.header_context = self.header.get_style_context()
         self.header_title = self.glade.get_object("header_title")
         self.parent_image = self.glade.get_object("img_parent")
         self.child_container = self.glade.get_object("grid1")
@@ -131,8 +135,8 @@ class MyProgram:
         self.parent_image.set_from_pixbuf(scaled_buf)
 
 
-        # self.button_search.set_flags(Gtk.CAN_DEFAULT)
-        self.button_search.grab_default()
+        # self.button_search.can_default(True)
+        # self.button_search.grab_default()
         self.entry.set_activates_default(True)
         self.app_window.set_focus(self.entry)
 
@@ -141,6 +145,11 @@ class MyProgram:
 
     def search_button_clicked(self, widget, data=None):
         associations = []
+        # remove classes in header
+        header_class_list = self.header_context.list_classes()
+        for class_name in header_class_list:
+            self.header_context.remove_class(class_name)
+
         for i in range(0,9):
             #make sure all pictures are reset
             pixbuf = Pixbuf.new_from_file("static/logo.png")
@@ -160,6 +169,7 @@ class MyProgram:
 
             if not parent_card:
                 self.header_title.set_text("Invalid Card!")
+                self.header_context.add_class('header_invalid_card')
                 self.pname.set_text("Card Not Found!")
                 self.pbarcode.set_text("XXXX")
                 self.pexpires.set_text("xxxx-xx-xx")
@@ -173,11 +183,18 @@ class MyProgram:
                 barcode = parent_card.get('barcode',"Barcode not set")
                 associations = parent_card.get('associations',[])
 
-                self.header_title.set_text("Scanned!")
+                # if card expired
+                if expires < date.today().isoformat():
+                    associations = []
+                    self.header_title.set_text("Card has expired!")
+                    self.header_context.add_class('header_expired')
+                else:
+                    self.header_title.set_text("Scanned!")
+                    self.header_context.add_class('header_scan_in')
+
                 self.pname.set_text(pname)
                 self.pbarcode.set_text(barcode)
                 self.pexpires.set_text(expires)
-
                 # load picture
                 try:
                     slackLog('loading parent picture: '+str(pid),delay=True)
@@ -195,6 +212,7 @@ class MyProgram:
             slackLog('Scanned card: '+pid+' could not be found',delay=True)
             #display an error
             self.header_title.set_text("Invalid Card!")
+            self.header_context.add_class('header_invalid_card')
             self.pname.set_text("Card Not Found!")
             self.pbarcode.set_text("XXXX")
             self.pexpires.set_text("xxxx-xx-xx")

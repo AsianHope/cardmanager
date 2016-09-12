@@ -1,6 +1,6 @@
 
 .head{
-  background: #81b3bf;
+  background: #00aad4;
 }
 .header_title{
   font-size: 30px;
@@ -9,4 +9,16 @@
 }
 .parrent_info{
   font-size: 20px;
+}
+.header_expired{
+  background: #f0ad4e;
+}
+.header_scan_out{
+  background: #00a65a;
+}
+.header_scan_in{
+  background: #367fa9;
+}
+.header_invalid_card{
+  background: #dd4b39;
 }
