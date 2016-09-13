@@ -69,7 +69,7 @@ Template.approveBadge.events({
             message: 'Entering'
           }
           // // call scanIn() method from server
-          Meteor.call('scanIn',card.barcode,new Date(),"Security Scan",0.00,[],Meteor.userId());
+          Meteor.call('scanIn',card.barcode,"Security Scan",0.00,[],Meteor.userId(),new Date());
 
           Session.set('current_approve_card',card)
           Session.set('current_current_approve_card_status',scan_in_sms)

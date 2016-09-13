@@ -84,7 +84,7 @@ Template.scanCard.events({
             message: 'Entering'
           }
           // call scanIn() method from server
-          Meteor.call('scanIn',card.barcode,new Date(),"Security Scan",0.00,[],Meteor.userId());
+          Meteor.call('scanIn',card.barcode,"Security Scan",0.00,[],Meteor.userId(),new Date());
 
           Session.set('currentcard',card)
           Session.set('currentstatus',scan_in_sms)

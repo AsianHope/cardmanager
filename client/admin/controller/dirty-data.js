@@ -113,7 +113,7 @@ Template.dirtyData.events({
             message: 'Scan in !'
           }
           // call scanIn() method from server
-          Meteor.call('scanIn',card.barcode,new Date(),"Security Scan",0.00,[],Meteor.userId());
+          Meteor.call('scanIn',card.barcode,"Security Scan",0.00,[],Meteor.userId(),new Date());
 
           Session.set('admin_current_card',card)
           Session.set('admin_scan_message',scan_in_sms)
