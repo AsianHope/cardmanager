@@ -23,6 +23,7 @@ from credentials import WEBHOOKURL
 
 from datetime import date
 
+
 USERNAME = socket.gethostname()
 messagequeue = []
 
@@ -43,11 +44,10 @@ class MyProgram:
         self.client.connect()
         self.client.login(METEOR_USERNAME,METEOR_PASSWORD)
         self.client.subscribe('cards')
+        self.client.subscribe('scans')
         time.sleep(3) #give it some time to finish loading everything
-
         self.all_cards = self.client.find('cards')
         slackLog("Pulled records for: "+str(len(self.all_cards))+" cards")
-
 
         for card in self.all_cards:
             try:
@@ -99,6 +99,7 @@ class MyProgram:
         self.pname = self.glade.get_object("lbl_pname")
         self.pbarcode = self.glade.get_object("lbl_pbarcode")
         self.pexpires = self.glade.get_object("lbl_pexpires")
+        self.error_message = self.glade.get_object("lbl_error_message")
 
         #add event to button_search
         self.button_search.connect("clicked", self.search_button_clicked, "3")
@@ -140,11 +141,14 @@ class MyProgram:
         self.entry.set_activates_default(True)
         self.app_window.set_focus(self.entry)
 
+        self.error_message.set_text("")
         self.app_window.show_all()
         return
 
     def search_button_clicked(self, widget, data=None):
         associations = []
+
+        self.error_message.set_text("")
         # remove classes in header
         header_class_list = self.header_context.list_classes()
         for class_name in header_class_list:
@@ -189,8 +193,49 @@ class MyProgram:
                     self.header_title.set_text("Card has expired!")
                     self.header_context.add_class('header_expired')
                 else:
-                    self.header_title.set_text("Scanned!")
-                    self.header_context.add_class('header_scan_in')
+                    def getScanCallbackFunction(error, result):
+                        # if cannot get scan, display error message
+                        if error:
+                            self.header_title.set_text('Scan failed!')
+                            self.error_message.set_text(error['message'])
+                            self.header_context.add_class('header_invalid_card')
+                            return
+                        else:
+                            # if card no scan in, add new scan
+                            if result == None:
+                                # scan in
+                                action = 'Security Scan'
+                                value = 0.00
+                                products = []
+                                user = METEOR_USERNAME
+                                self.client.call('scanIn',[pid,action,value,products,user],scanInCallbackFunction)
+                            # if card already scan in, update scan
+                            else:
+                                # scan out
+                                scan_id = result['_id']
+                                self.client.call('scanOut',[scan_id],scanOutCallbackFunction)
+
+                    def scanInCallbackFunction(error,result):
+                        # to check if card scan-in success or error
+                        if error:
+                            self.header_title.set_text('Scan failed!')
+                            self.error_message.set_text(error['message'])
+                            self.header_context.add_class('header_invalid_card')
+                        else:
+                            self.header_title.set_text("Scan-in")
+                            self.header_context.add_class('header_scan_in')
+                    def scanOutCallbackFunction(error,result):
+                        # to check if card scan-out success or error
+                        if error:
+                            self.header_title.set_text('Scan failed!')
+                            self.error_message.set_text(error['message'])
+                            self.header_context.add_class('header_invalid_card')
+                        else:
+                            self.header_title.set_text("Scan-out")
+                            self.header_context.add_class('header_scan_out')
+
+                    # get scan to check if scan in or scan out
+                    self.client.call('get_scan',[pid],getScanCallbackFunction)
 
                 self.pname.set_text(pname)
                 self.pbarcode.set_text(barcode)
