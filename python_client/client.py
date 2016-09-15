@@ -342,6 +342,7 @@ def fetchPhotosByID(sid):
 
 def slackLog(message,icon_emoji=':guardsman:',delay=False):
     global messagequeue
+    holdqueue = False
     if not delay:
         r = requests.post(WEBHOOKURL,data={'payload':'{"text":"'+message+'","username":"'+USERNAME+'","icon_emoji":"'+icon_emoji+'"}'})
     else:
@@ -352,8 +353,13 @@ def slackLog(message,icon_emoji=':guardsman:',delay=False):
             for mess in messagequeue:
                 message_with_breaks = message_with_breaks+'\n'+str(mess)
             message_with_breaks = message_with_breaks+'\n'+message
-            r = requests.post(WEBHOOKURL,data={'payload':'{"text":"'+message_with_breaks+'","username":"'+USERNAME+'","icon_emoji":"'+icon_emoji+'"}'})
-            messagequeue = []
+            try:
+                r = requests.post(WEBHOOKURL,data={'payload':'{"text":"'+message_with_breaks+'","username":"'+USERNAME+'","icon_emoji":"'+icon_emoji+'"}'})
+            except requests.exceptions.ConnectionError:
+                holdqueue = True
+
+            if not holdqueue:
+                messagequeue = []
 
 if __name__=="__main__":
     MyProgram()
