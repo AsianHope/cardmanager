@@ -25,5 +25,28 @@ Meteor.methods({
       ]},
       {sort: {'scantimes.0' : -1}
     })
+  },
+  'bulk_insert_update_scans':function(scan_list){
+    scan_list.forEach(function(data) {
+        scan = Scans.findOne({
+          "_id":data["_id"]
+        })
+        if ((scan == undefined) || (scan == 'undefined')){
+          Scans.insert({
+            "cardnumber": data["cardnumber"],
+            "scantimes": data["scantimes"],
+            "action" : data["action"],
+            "value": data["value"],
+            "products": data["products"],
+            "user": data["user"]
+          })
+        }
+        else{
+          Scans.update(
+            {_id :data["_id"]},
+            {$set: {'scantimes': data["scantimes"] }}
+          );
+        }
+      });
   }
 });
