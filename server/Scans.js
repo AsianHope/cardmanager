@@ -33,6 +33,7 @@ Meteor.methods({
         })
         if ((scan == undefined) || (scan == 'undefined')){
           Scans.insert({
+            "_id": data["_id"],
             "cardnumber": data["cardnumber"],
             "scantimes": data["scantimes"],
             "action" : data["action"],
@@ -42,10 +43,12 @@ Meteor.methods({
           })
         }
         else{
-          Scans.update(
-            {_id :data["_id"]},
-            {$set: {'scantimes': data["scantimes"] }}
-          );
+          if ((data["scantimes"].length >1) && data["scantimes"][1] != null){
+            Scans.update(
+              {_id :data["_id"]},
+              {$set: {'scantimes': data["scantimes"] }}
+            );
+          }
         }
       });
   }
