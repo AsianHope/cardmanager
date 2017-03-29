@@ -2,3 +2,4 @@ mup.json
 public/StudentPhotos/*
 python_client/resource
 python_client/credentials.py
+public/static/*

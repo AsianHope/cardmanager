@@ -22,7 +22,11 @@
       </div>
       <div class="col-md-6">
         <div class="col-md-6">
-          <img style="width:200px; height:300px;" src="/static/{{profile}}" onerror="this.src='/static/NoImageAvailable.gif'"/><br>
+          {{#if profile }}
+            <img style="width:200px; height:300px;" src="/static/{{profile}}" onerror="this.src='/static/NoImageAvailable.gif'"/><br>
+          {{else}}
+            <img style="width:200px; height:300px;" src="/static/{{barcode}}.JPG" onerror="this.src='/static/NoImageAvailable.gif'"/><br>
+          {{/if}}
         </div>
         <div class="col-md-6">
           <table class="tbl_single_card">
