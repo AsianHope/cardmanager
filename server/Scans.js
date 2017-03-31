@@ -51,5 +51,23 @@ Meteor.methods({
           }
         }
       });
+  },
+  'bulk_insert_update_lunch_scans':function(scan_list){
+    scan_list.forEach(function(data) {
+        scan = Scans.findOne({
+          "_id":data["_id"]
+        })
+        if ((scan == undefined) || (scan == 'undefined')){
+          Scans.insert({
+            "_id": data["_id"],
+            "cardnumber": data["cardnumber"],
+            "scantimes": data["scantimes"],
+            "action" : data["action"],
+            "value": data["value"],
+            "products": data["products"],
+            "user": data["user"]
+          })
+        }
+      });
   }
 });
